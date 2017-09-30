@@ -8,6 +8,7 @@ Created on Sat Sep 30 15:42:15 2017
 from datetime import datetime
 import requests
 from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
 
 # make sure ES is up and running
 res = requests.get('http://localhost:9200')
@@ -89,15 +90,23 @@ doc3 = {
     
     
 #index some test data
-res= es.index(index="paindex", doc_type='PA', body=doc)
+res= es.index(index="paindex", doc_type='PA', body=doc1)
 print(res['created'])
 
-res = es.get(index="paindex", doc_type='PA', id=1)
-print(res['_source'])
+res= es.index(index="paindex", doc_type='PA', body=doc2)
+print(res['created'])
+
+res= es.index(index="paindex", doc_type='PA', body=doc3)
+print(res['created'])
 
 es.indices.refresh(index="paindex")
 
+# Search queries
 res = es.search(index="paindex", body={"query": {"match_all": {}}})
-print("Got %d Hits:" % res['hits']['total'])
-for hit in res['hits']['hits']:
-    print("%(applicants)s %(county)s: %(dollars)s" % hit["_source"])
+print("%d documents found" % res['hits']['total'])
+
+#==============================================================================
+# for doc in res['hits']['hits']:
+#     print("%s) %s" % (doc['_id'], doc['_source']['content']))
+# 
+#==============================================================================
