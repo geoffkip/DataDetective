@@ -9,11 +9,19 @@ DataDetective aims to integrate all the economic, education, and health related 
 * **Data Visual Recommender:** Based on the selected measures, find other data (not time-series) to display adding context to the time-series visual.
 * **Ingestion Engine:** Ingest data sets into a form that can be easily visualized. Also, categorize and tag the data sets so users can easily search and explore the data sets.
 
+
+### Personas :construction:
+Our application targets a few personas with the following high-level stories:
+#### Agency Executive
+As an Agency Executive, I want an easy way to explore the data on data.pa.gov so I can find trends that might be worth further investigation.
+#### Data-driven Reporter
+As a Data-driven Reporter, I want to find noteworthy insights from the data on data.pa.gov so I can find something to publish or further investigate.
+
 ## Development Process and Methodology
 DataDetective is built using ElasticSearch and Python Flask. We ingest the data sets into ElasticSearch using Python scripts. We collect the categories and tags associated with the data sets so DataDetective can suggest data sets to visualize. We split into two teams, one team to build out the interface for exploring, one team to ingest the data.
 
 ### Team Titans
-#### :hammer_and_wrench: Platform Engineering 
+#### :hammer_and_wrench: Platform Engineering
 **Mission:** Build the application, support the platform on GCP
 * Geoffry Kip (@gjerome1991)
 * Brilzen Varghese (@x777billy)
@@ -36,10 +44,3 @@ DataDetective is built using ElasticSearch and Python Flask. We ingest the data 
 * ElasticSearch
 * Python
 * Flask
-
-## Personas :construction:
-Our application targets a few personas with the following high-level stories:
-### Agency Executive
-As an Agency Executive, I want an easy way to explore the data on data.pa.gov so I can find trends that might be worth further investigation.
-### Data-driven Reporter
-As a Data-driven Reporter, I want to find noteworthy insights from the data on data.pa.gov so I can find something to publish or further investigate.
