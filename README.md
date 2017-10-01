@@ -13,18 +13,18 @@ DataDetective aims to integrate all the economic, education, and health related 
 DataDetective is built using ElasticSearch and Python Flask. We ingest the data sets into ElasticSearch using Python scripts. We collect the categories and tags associated with the data sets so DataDetective can suggest data sets to visualize. We split into two teams, one team to build out the interface for exploring, one team to ingest the data.
 
 ### Team Titans
-#### Platform Engineering :hammer_and_wrench:
+#### :hammer_and_wrench: Platform Engineering 
 **Mission:** Build the application, support the platform on GCP
 * Geoffry Kip (@gjerome1991)
 * Brilzen Varghese (@x777billy)
 
-#### Data Science :microscope:
+#### :microscope: Data Science
 **Mission:** Extract, transform, load, and master the data
 * Marissa Bredesen (@mmbredesen)
 * Edna Galindo (@Marys0l)
 * Kyle McGrogan (@mcgrogan91)
 
-#### Overwatch :construction_worker_man:
+#### :construction_worker_man: Overwatch
 **Mission:** Maintain the flow
 * Michael Ghen (@mikeghen)
 
