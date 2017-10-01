@@ -15,17 +15,16 @@ Sample:
 }
 """
 
-
 DATA_FILE_PATH = 'data/jobs.json'
 
 def extract():
     """
     Extracts data from a URL. Returns the data extracted as a dictionary.
     """
-    URL = 'https://data.pa.gov/resource/sshd-za9g.json'
+    URL = 'http://data.pa.gov/resource/sshd-za9g.json'
 
     # Get JSON data from the URL
-    response        = urllib2.urlopen(URL)
+    response = urllib2.urlopen(URL)
     extracted_data  = json.load(response)
 
     return extracted_data
@@ -45,18 +44,21 @@ def transform(data):
         #print (resource.keys())
         county                      = datum["countyname"]
         date                        = datetime.strptime('%s %s'%(datum["month"],datum["year"]),'%B %Y')
-        jobs_pledged_to_be_created  = datum["jobs_pledged_to_be_created"]
-        jobs_pledged_to_be_retained = datum["jobs_pledged_to_be_retained"]
-        total_jobs                  = datum["total_jobs"]
+        jobs_pledged_to_be_created  = int(datum["jobs_pledged_to_be_created"])
+        jobs_pledged_to_be_retained = int(datum["jobs_pledged_to_be_retained"])
+        total_jobs                  = int(datum["total_jobs"])
 
-        str_c = ','.join(categories)
-        str_t = ','.join(tags)
+        data_point = {
+            'county': county,
+            'date': date.strftime('%Y-%m-%d'),
+            'jobs_pledged_to_be_created': jobs_pledged_to_be_created,
+            'jobs_pledged_to_be_retained': jobs_pledged_to_be_retained,
+            'total_jobs': total_jobs
+        }
 
-        record = (name,id_data, link, str_c, str_t)
+        data_points.append(data_point)
 
-        records.append(record)
-
-    return records
+    return data_points
 
 def load(records):
     """
@@ -70,15 +72,13 @@ def load(records):
         'data': records
     }
 
-    json_document = json.dumps(document)
-
+    # TODO: Write to ElasticSearch
     with open(DATA_FILE_PATH, 'w') as data_file:
-        data_file.write(json_document)
+        data_file.write(json.dumps(document))
 
-    return json_document
-
+    return document
 
 data = extract()
-records = transform(data)
-document = load(pa_records)
+data_points = transform(data)
+document = load(data_points)
 pprint(document)
