@@ -11,7 +11,9 @@ DataDetective aims to integrate all the economic, education, and health related 
 
 ### Personas:
 Our application targets a few personas with the following high-level stories:
+
 **Agency Executive:** As an Agency Executive, I want an easy way to explore the data on data.pa.gov so I can find trends that might be worth further investigation.
+
 **Data-driven Reporter:** As a Data-driven Reporter, I want to find noteworthy insights from the data on data.pa.gov so I can find something to publish or further investigate.
 
 ## Development Process and Methodology
