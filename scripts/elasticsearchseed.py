@@ -9,6 +9,7 @@ from datetime import datetime
 import requests
 from elasticsearch import Elasticsearch 
 from elasticsearch_dsl import *
+import json
 
 # make sure ES is up and running
 res = requests.get('http://localhost:9200')
@@ -16,97 +17,29 @@ print(res.content)
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 s = Search(using=es)
 
-doc1 = {
-    'id': 'dv4n-h3dn',
-    'name': 'School Performance' ,
-    'categories': ["Education", "Health"] ,
-    'tags': ["Bridges"],
-    'data': [{"date":"2017-09-27",
-              "county": "Bucks",
-              "dollars" : 20 ,
-              "applicants": 2
-            },
+#load real data
 
-            {"date":"2017-09-27",
-              "county": "Bucks",
-              "dollars" : 20 ,
-              "applicants": 2
-            },
-             
-             {"date":"2017-09-27",
-              "county": "Bucks",
-              "dollars" : 20 ,
-              "applicants": 2
-            }] ,
-}
-    
-doc2 = {
-    'id': 'dv4n-h3dn',
-    'name': 'School Performance' ,
-    'categories': ["Education", "Health"] ,
-    'tags': ["Bridges"],
-    'data': [{"date":"2017-09-27",
-              "county": "Bucks",
-              "dollars" : 20 ,
-              "applicants": 2
-            },
+es.indices.delete(index='paindex')
 
-            {"date":"2017-09-27",
-              "county": "Bucks",
-              "dollars" : 20 ,
-              "applicants": 2
-            },
-             
-             {"date":"2017-09-27",
-              "county": "Bucks",
-              "dollars" : 20 ,
-              "applicants": 2
-            }] ,
-}
+with open("/Users/geoffrey.kip/DataDetective/data/jobs.json") as json_data:
+    PA_data = json.load(json_data)
+    print(PA_data)
     
-doc3 = {
-    'id': 'dv4n-h3dn',
-    'name': 'School Performance' ,
-    'categories': ["Education", "Health"] ,
-    'tags': ["Bridges"],
-    'data': [{"date":"2017-09-27",
-              "county": "Bucks",
-              "dollars" : 20 ,
-              "applicants": 2
-            },
-
-            {"date":"2017-09-27",
-              "county": "Bucks",
-              "dollars" : 20 ,
-              "applicants": 2
-            },
-             
-             {"date":"2017-09-27",
-              "county": "Bucks",
-              "dollars" : 20 ,
-              "applicants": 2
-            }] ,
-}
-    
-    
-    
-#index some test data
-res= es.index(index="paindex", doc_type='PA', body=doc1)
-print(res['created'])
-
-res= es.index(index="paindex", doc_type='PA', body=doc2)
-print(res['created'])
-
-res= es.index(index="paindex", doc_type='PA', body=doc3)
+res= es.index(index="paindex", doc_type='PA', body=PA_data)
 print(res['created'])
 
 es.indices.refresh(index="paindex")
 
+res = es.search(index="paindex", body={"query": {"match_all": {}}})
+print(res)
+
 # Search queries
 # searching for id
-s = s.query("multi_match", query='dv4n-h3dn', fields=['id'])
+
+s = s.query("multi_match", query='d5pf-ti7w', fields=['id'])
 response = s.execute()
 
-res = es.search(index="paindex", body={"query": {"match_all": {"id": "}}})
+res = es.search(index="paindex", body={"query": {"match_all": {}}})
 print("%d documents found" % res['hits']['total'])
+
 
