@@ -7,13 +7,14 @@ Created on Sat Sep 30 15:42:15 2017
 """
 from datetime import datetime
 import requests
-from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Search
+from elasticsearch import Elasticsearch 
+from elasticsearch_dsl import *
 
 # make sure ES is up and running
 res = requests.get('http://localhost:9200')
 print(res.content)
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+s = Search(using=es)
 
 doc1 = {
     'id': 'dv4n-h3dn',
@@ -102,11 +103,10 @@ print(res['created'])
 es.indices.refresh(index="paindex")
 
 # Search queries
-res = es.search(index="paindex", body={"query": {"match_all": {}}})
+# searching for id
+s = s.query("multi_match", query='dv4n-h3dn', fields=['id'])
+response = s.execute()
+
+res = es.search(index="paindex", body={"query": {"match_all": {"id": "}}})
 print("%d documents found" % res['hits']['total'])
 
-#==============================================================================
-# for doc in res['hits']['hits']:
-#     print("%s) %s" % (doc['_id'], doc['_source']['content']))
-# 
-#==============================================================================
