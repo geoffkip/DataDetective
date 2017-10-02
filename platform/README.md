@@ -7,7 +7,7 @@ To install run:
 After installing Java JDK 8 or higher then you can install elasticsearch.
 To install elastic search I followed the documentation here -->https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html
 on the elastic search website.
-To install elastic search I ran 
+To install elastic search I ran:
 2) sudo apt-get update && sudo apt-get install elasticsearch.
 
 Make sure that the vm you are running has enough memory to run the elasticsearch webserver (at least 2GB ram).
