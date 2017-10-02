@@ -1,4 +1,10 @@
 # DataDetective: Platform
+
+## Setting up Google cloud virtual machine(vm)
+To be updated
+
+
+## Setting up elasticsearch db
 To set up elasticsearch on the virtual machine instance(vm) I first installed Java Development Kit (JDK) 8 since elasticsearch needs this dependency to run.
 The article I used can be found here -->https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-get-on-ubuntu-16-04
 To install run:
@@ -26,3 +32,6 @@ To check that elasticsearch is running run:
 ```
 service elasticsearch status
 ```
+
+## Setting up flask app
+To be updated
