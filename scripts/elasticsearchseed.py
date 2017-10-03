@@ -11,6 +11,7 @@ from elasticsearch import Elasticsearch
 from elasticsearch_dsl import *
 import json
 import pandas as pd
+import plotly 
 import plotly.plotly as py
 import plotly.graph_objs as go
 plotly.tools.set_credentials_file(username='gjerome1991', api_key='JTNvEeVmv04ADNFHYTIJ')
