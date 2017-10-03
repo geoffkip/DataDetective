@@ -59,15 +59,30 @@ data= data.groupby(["county", "date"]).sum()
 data.reset_index(inplace=True)
 data=data.sort_values('date')
 columntypes(data)
-data1= data[data["county"]== "Northampton"]
+  
+traces = []
+for county in data['county'].unique():
+    traces.append({
+        'x' : data.date[data['county'] == county],
+        'y' : data.total_jobs[data['county'] == county],
+        'name' : county
+    })
+    
+fig = {
+    'data' : traces,
+    'layout' : {
+        'title' : 'Total Jobs by County',
+        'xaxis' : {
+            'title' : 'Date',
+        },
+        'yaxis' : {
+            'title' : 'Total Jobs'
+        }
+    }
+}
 
-
-
-plot = [go.Scatter(
-          x=data1.date,
-          y=data1['total_jobs'])]
-
-py.iplot(plot)
+py.image.ishow(fig) 
+py.iplot(fig)
 
 
 
