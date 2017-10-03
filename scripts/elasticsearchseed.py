@@ -10,6 +10,7 @@ import requests
 from elasticsearch import Elasticsearch 
 from elasticsearch_dsl import *
 import json
+import pandas as pd
 
 # make sure ES is up and running
 res = requests.get('http://localhost:9200')
@@ -41,5 +42,12 @@ response = s.execute()
 
 res = es.search(index="paindex", body={"query": {"match_all": {}}})
 print("%d documents found" % res['hits']['total'])
+
+#example how to access measures from loaded data in elasticsearch database
+data=res["hits"]["hits"][0]["_source"]["data"][0]["total_jobs"]
+#this grabs data from the elastic search query and formats it as a dataframe so its easier to plot
+data=pd.DataFrame(res["hits"]["hits"][0]["_source"]["data"])
+
+
 
 
