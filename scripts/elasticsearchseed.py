@@ -58,6 +58,8 @@ data["date"]=pd.to_datetime(data['date'])
 data=data.sort_values('date')
 columntypes(data)
 data1= data[data["county"]== "Northampton"]
+data1= data1.groupby(["county", "date"]).sum()
+data1.reset_index(inplace=True)
 
 plot = [go.Scatter(
           x=data1.date,
