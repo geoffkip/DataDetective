@@ -55,11 +55,13 @@ data=res["hits"]["hits"][0]["_source"]["data"][0]["total_jobs"]
 #this grabs data from the elastic search query and formats it as a dataframe so its easier to plot
 data=pd.DataFrame(res["hits"]["hits"][0]["_source"]["data"])
 data["date"]=pd.to_datetime(data['date'])
+data= data.groupby(["county", "date"]).sum()
+data.reset_index(inplace=True)
 data=data.sort_values('date')
 columntypes(data)
 data1= data[data["county"]== "Northampton"]
-data1= data1.groupby(["county", "date"]).sum()
-data1.reset_index(inplace=True)
+
+
 
 plot = [go.Scatter(
           x=data1.date,
