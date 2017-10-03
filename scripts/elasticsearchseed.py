@@ -11,6 +11,13 @@ from elasticsearch import Elasticsearch
 from elasticsearch_dsl import *
 import json
 import pandas as pd
+import plotly.plotly as py
+import plotly.graph_objs as go
+plotly.tools.set_credentials_file(username='gjerome1991', api_key='JTNvEeVmv04ADNFHYTIJ')
+
+def columntypes(dataset):
+    for col in dataset:
+        print (col,dataset[col].dtypes)
 
 # make sure ES is up and running
 res = requests.get('http://localhost:9200')
@@ -47,6 +54,16 @@ print("%d documents found" % res['hits']['total'])
 data=res["hits"]["hits"][0]["_source"]["data"][0]["total_jobs"]
 #this grabs data from the elastic search query and formats it as a dataframe so its easier to plot
 data=pd.DataFrame(res["hits"]["hits"][0]["_source"]["data"])
+data["date"]=pd.to_datetime(data['date'])
+data=data.sort_values('date')
+columntypes(data)
+data1= data[data["county"]== "Northampton"]
+
+plot = [go.Scatter(
+          x=data1.date,
+          y=data1['total_jobs'])]
+
+py.iplot(plot)
 
 
 
