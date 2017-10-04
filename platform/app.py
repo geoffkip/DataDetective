@@ -1,65 +1,47 @@
-from flask import Flask, render_template, request, session, redirect, url_for
-from flask.ext.elasticsearch import FlaskElasticsearch
+# -*- coding: utf-8 -*-
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import *
-from flask import jsonify
-import pandas as pd
-import plotly
-import plotly.plotly as py
 import plotly.graph_objs as go
-plotly.tools.set_credentials_file(username='gjerome1991', api_key='JTNvEeVmv04ADNFHYTIJ')
+import pandas as pd
 
-
-app = Flask(__name__)
-
-#Initialize elasticsearch with flask app
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+res = es.search(index="paindex", body={"query": {"match_all": {}}})
+data=pd.DataFrame(res["hits"]["hits"][0]["_source"]["data"])
+data["date"]=pd.to_datetime(data['date'])
+data= data.groupby(["county", "date"]).sum()
+data.reset_index(inplace=True)
+data=data.sort_values('date')
 
-@app.route('/')
-def index():
-    return 'Data Detective App'
+app = dash.Dash()
 
-#Test to see if data prints out
-@app.route('/elasticsearch')
-def elasticsearch():
-    s = Search(using=es)
-    res = es.search(index="paindex", body={"query": {"match_all": {}}})
-    return jsonify(res)
+app.layout = html.Div(children=[
+    html.H1(children="Data Detective"),
 
+    html.Div(children='''
+    Total Jobs by County
+    '''
+    ),
 
-@app.route('/datadetective')
-def plot():
-    res = es.search(index="paindex", body={"query": {"match_all": {}}})
-    data=pd.DataFrame(res["hits"]["hits"][0]["_source"]["data"])
-    data["date"]=pd.to_datetime(data['date'])
-    data= data.groupby(["county", "date"]).sum()
-    data.reset_index(inplace=True)
-    data=data.sort_values('date')
-
-    traces = []
-    for county in data['county'].unique():
-        traces.append({
-        'x' : data.date[data['county'] == county],
-        'y' : data.total_jobs[data['county'] == county],
-        'name' : county
-    })
-
-    fig = {
-        'data' : traces,
-        'layout' : {
-        'title' : 'Total Jobs by County',
-        'xaxis' : {
+    dcc.Graph(
+        id='Time-series-graph',
+        figure = {
+        'data' : [go.Bar(
+                  x= data.date[data['county'] == county],
+                  y= data.total_jobs[data['county'] == county],
+                  name= county) for county in data['county'].unique()],
+        'layout' : go.Layout(
+        barmode='stack',
+        xaxis = {
             'title' : 'Date',
         },
-        'yaxis' : {
+        yaxis = {
             'title' : 'Total Jobs'
-        }
+        })
     }
-}
-
-    plot= py.image.ishow(fig)
-
-
+)])
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run_server(debug=True)
