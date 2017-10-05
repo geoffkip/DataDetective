@@ -22,8 +22,11 @@ sudo apt-get update && sudo apt-get install elasticsearch.
 
 Make sure that the vm you are running has enough memory to run the elasticsearch webserver (at least 2GB ram).
 
-To start the elasticsearch server run:
+To start the elasticsearch server run these commands as the root user:
 ```
+# Become root user
+sudo -s
+# Start service
 sudo elasticsearch start
 ```
 
@@ -36,5 +39,4 @@ service elasticsearch status
 ## Setting up flask app
 To be updated
 
-BV - https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
-
+https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps
