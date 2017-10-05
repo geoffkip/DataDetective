@@ -20,20 +20,34 @@ app = dash.Dash()
 app.layout = html.Div(children=[
     html.H1(children="Data Detective"),
 
-    html.Div(children='''
-    Total Jobs by County
-    '''
+    html.Div([
+    html.Label('County'),
+    dcc.Dropdown(
+        options=[
+            {'label':'Alleghany', 'value': 'Alleghany'},
+            {'label': 'Philadelphia', 'value': 'Philadelphia'}
+        ],
+        value=['Alleghany', 'Philadelphia'],
+        multi=True
     ),
+    html.Label('Measure'),
+    dcc.Dropdown(
+        options=[
+            { 'label': 'Jobs', 'value': 'Jobs'},
+            {'label': 'Schools', 'value': 'Schools'}
+        ],
+        value=['Jobs', 'Schools'],
+        multi=True
+    )]),
 
     dcc.Graph(
         id='Time-series-graph',
         figure = {
-        'data' : [go.Bar(
+        'data' : [go.Scatter(
                   x= data.date[data['county'] == county],
                   y= data.total_jobs[data['county'] == county],
                   name= county) for county in data['county'].unique()],
         'layout' : go.Layout(
-        barmode='stack',
         xaxis = {
             'title' : 'Date',
         },
