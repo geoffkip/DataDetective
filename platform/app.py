@@ -15,6 +15,8 @@ data= data.groupby(["county", "date"]).sum()
 data.reset_index(inplace=True)
 data=data.sort_values('date')
 
+counties= data['county'].unique()
+
 app = dash.Dash()
 
 app.layout = html.Div(children=[
@@ -23,10 +25,7 @@ app.layout = html.Div(children=[
     html.Div([
     html.Label('County'),
     dcc.Dropdown(
-        options=[
-            {'label':'Alleghany', 'value': 'Alleghany'},
-            {'label': 'Philadelphia', 'value': 'Philadelphia'}
-        ],
+        options=[{'label': i, 'value': i} for i in counties],
         value=['Alleghany', 'Philadelphia'],
         multi=True
     ),
