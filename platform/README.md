@@ -38,4 +38,5 @@ service elasticsearch status
 
 ## Setting up flask app
 To be updated
+
 Suggested [these instructions](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps) to set up Flask on Ubuntu.
