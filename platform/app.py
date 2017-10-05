@@ -64,10 +64,11 @@ app.layout = html.Div([
     dash.dependencies.Output('Time-series-graph', 'figure'),
     [dash.dependencies.Input('County', 'value')])
 def update_graph(County):
+    plot= data[data['county'] == County]
     return {
         'data' : [go.Scatter(
-                  x= data.date[data['county'] == County]['Value'],
-                  y= data.total_jobs[data['county'] == County]['Value'],
+                  x= plot.date[plot['county'] == County]['Value'],
+                  y= plot.total_jobs[plot['county'] == County]['Value'],
                   name= County)],
         'layout' : go.Layout(
         xaxis = {
