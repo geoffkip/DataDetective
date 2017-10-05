@@ -19,18 +19,22 @@ counties= data['county'].unique()
 
 app = dash.Dash()
 
-app.layout = html.Div(children=[
-    html.H1(children="Data Detective"),
+app.layout = html.Div([
+
+    html.H1("Data Detective"),
 
     html.Div([
     html.Label('County'),
     dcc.Dropdown(
+        id='County',
         options=[{'label': i, 'value': i} for i in counties],
-        value=['Alleghany', 'Philadelphia'],
+        value=['Philadelphia'],
         multi=True
     ),
+
     html.Label('Measure'),
     dcc.Dropdown(
+        id='Measure',
         options=[
             { 'label': 'Jobs', 'value': 'Jobs'},
             {'label': 'Schools', 'value': 'Schools'}
@@ -55,6 +59,26 @@ app.layout = html.Div(children=[
         })
     }
 )])
+
+@app.callback(
+    dash.dependencies.Output('Time-series-graph', 'figure'),
+    [dash.dependencies.Input('County', 'value')])
+def update_graph(County):
+    return {
+        'data' : [go.Scatter(
+                  x= data.date[data['county'] == County]['Value'],
+                  y= data.total_jobs[data['county'] == County]['Value'],
+                  name= County)],
+        'layout' : go.Layout(
+        xaxis = {
+            'title' : 'Date',
+        },
+        yaxis = {
+            'title' : 'Total Jobs'
+        })
+        }
+
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
