@@ -16,7 +16,7 @@ Our application targets a few personas with the following high-level stories:
 
 **Data-driven Reporter:** As a Data-driven Reporter, I want to find noteworthy insights from the data on data.pa.gov so I can find something to publish or further investigate.
 
-**Researcher:** As a researcher, I want to access and compare data sets to support my hypotheses. The option to utilize a database with multiple data sets where I can easily compare and manipulate data which will streamline my research efforts. 
+**Researcher:** As a researcher, I want to access and compare data sets to support my hypotheses. The option to utilize a database with multiple data sets where I can easily compare and manipulate data will streamline my research efforts. 
 
 ## Development Process and Methodology
 DataDetective is built using ElasticSearch and Python Flask. We ingest the data sets into ElasticSearch using Python scripts. We collect the categories and tags associated with the data sets so DataDetective can suggest data sets to visualize. We split into two teams, one team to build out the interface for exploring, one team to ingest the data.
