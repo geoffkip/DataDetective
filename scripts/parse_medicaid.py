@@ -53,7 +53,7 @@ def transform(data):
         date                        = datum["date"][0:10]
         ma_children = int(datum["ma_children"])
         ma_individuals = int(datum["ma_individuals"])
-    
+
         data_point = {
             'county_name': county,
             'date': date,

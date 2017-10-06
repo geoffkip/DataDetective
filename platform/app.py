@@ -27,10 +27,9 @@ app.layout = html.Div([
     html.Div([
     html.Label('County'),
     dcc.Dropdown(
-        id='County',
+        id='county',
         options=[{'label': i, 'value': i} for i in counties],
-        value=['Philadelphia'],
-        multi=True
+        value=['Philadelphia']
     ),
 
     html.Label('Measure'),
@@ -45,32 +44,18 @@ app.layout = html.Div([
     )]),
 
     dcc.Graph(
-        id='Time-series-graph',
-        figure = {
-        'data' : [go.Scatter(
-                  x= data.date[data['county'] == county],
-                  y= data.total_jobs[data['county'] == county],
-                  name= county) for county in data['county'].unique()],
-        'layout' : go.Layout(
-        xaxis = {
-            'title' : 'Date',
-        },
-        yaxis = {
-            'title' : 'Total Jobs'
-        })
-    }
-)])
+        id='time-series-graph')
+])
 
 @app.callback(
-    dash.dependencies.Output('Time-series-graph', 'figure'),
-    [dash.dependencies.Input('County', 'value')])
-def update_graph(County):
-    plot= data[data['county'] == County]
+    dash.dependencies.Output('time-series-graph', 'figure'),
+    [dash.dependencies.Input('county', 'value')])
+def update_graph(selected_county):
     return {
         'data' : [go.Scatter(
-                  x= plot.date[plot['county'] == County]['Value'],
-                  y= plot.total_jobs[plot['county'] == County]['Value'],
-                  name= County)],
+                  x= data.date[data['county'] == selected_county],
+                  y= data.total_jobs[data['county'] == selected_county],
+                  name= selected_county)],
         'layout' : go.Layout(
         xaxis = {
             'title' : 'Date',
