@@ -30,11 +30,32 @@ s = Search(using=es)
 
 es.indices.delete(index='paindex')
 
-with open("/Users/geoffrey.kip/DataDetective/data/jobs.json") as json_data:
-    PA_data = json.load(json_data)
-    print(PA_data)
+with open("/Users/geoffrey.kip/DataDetective/data/jobs.json") as jobs_data:
+    PA_jobs = json.load(jobs_data)
+    print(PA_jobs)
     
-res= es.index(index="paindex", doc_type='PA', body=PA_data)
+with open("/Users/geoffrey.kip/DataDetective/data/trainings.json") as trainings_data:
+    PA_trainings = json.load(trainings_data)
+    print(PA_trainings)
+
+with open("/Users/geoffrey.kip/DataDetective/data/medicaid.json") as medicaid_data:
+    PA_medicaid = json.load(medicaid_data)
+    print(PA_medicaid)
+
+with open("/Users/geoffrey.kip/DataDetective/data/prisons.json") as prisons_data:
+    PA_prisons = json.load(prisons_data)
+    print(PA_prisons)
+    
+res= es.index(index="paindex", doc_type='PA', body=PA_jobs)
+print(res['created'])
+
+res= es.index(index="paindex", doc_type='PA', body=PA_trainings)
+print(res['created'])
+
+res= es.index(index="paindex", doc_type='PA', body=PA_medicaid)
+print(res['created'])
+
+res= es.index(index="paindex", doc_type='PA', body=PA_prisons)
 print(res['created'])
 
 es.indices.refresh(index="paindex")
