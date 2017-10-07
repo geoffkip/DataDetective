@@ -24,7 +24,7 @@ def extract():
     """
     Extracts data from a URL. Returns the data extracted as a pandas DataFrame.
     """
-    URL = 'https://data.pa.gov/resource/vjq8-nahv.json'
+    URL = 'http://data.pa.gov/resource/vjq8-nahv.json'
     response = urllib2.urlopen(URL)
     extracted_data  = json.load(response)
 
@@ -72,6 +72,7 @@ def load(records):
         'name': 'Supplemental Nutrition Assistance Program Individuals And Dollars 2004 - Current Human ServicesHuman Services Medical Assistance Enrollment July 2003 - Current Human Services',
         'categories': ['Human Services'],
         'tags': ['nutrition,snap,human,service,federal,individual,dollar,assistance,food,stamps'],
+        'measures': ['snap_dollars','snap_individuals'],
         'data': records
     }
 
