@@ -45,62 +45,35 @@ def transform(data):
     county_data_set = []
 
     for datum in data:
-        full_date = datum['fiscal_year'].split(" ")
-        year = full_date[1]
+        full_date = datum['date'].split("-")
+        month = full_date[1] + "-" + full_date[0]
         institution = datum['institution']
-        if not([institution, year] in finished):
-            county_datum = {
-                "corrections_population": int(datum['corrections_population']),
-                "county": datum['county'],
-                "fiscal_year": year
-            }
-            county_data_set.append(county_datum)
-        finished.append([institution, year])
+        county_datum = {
+            "corrections_population": int(datum['corrections_population']),
+            "county": datum['county'],
+            "month": month,
+            "institution": datum['institution']
+        }
+        county_data_set.append(county_datum)
+
 
     #pprint(county_data_set)
 
     correction_dataframe = pd.DataFrame.from_dict(county_data_set)
-    agg_function = {'corrections_population': ['sum']}
-    correction_dataframe = correction_dataframe.groupby(["county", "fiscal_year"]).agg(agg_function)
+    # Group by month, take the max for each institution
+    # Group by county, sum them
+    agg_function_max = {'corrections_population': ['max']}
+    correction_dataframe = correction_dataframe.groupby(["institution", "month"]).agg(agg_function_max)
+    agg_function_sum = {'corrections_population': ['sum']}
+    correction_dataframe = correction_dataframe.groupby(["county", "month"]).agg(agg_function_sum)
 
-    #pprint(correction_dataframe)
-
+    pprint(correction_dataframe)
+    correction_dataframe.reset_index(inplace=True)
+    print(correction_dataframe.columns)
+    correction_dataframe.columns = pd.Index(['county','date','corrections_populations'])
+    pprint(correction_dataframe)
     return correction_dataframe
 
-
-
-    """
-    for datum in data:
-        #print (resource.keys())
-        county                      = datum["county"]
-        year = datum["fiscal_year"]
-
-
-        if county not in counties:
-            counties.append(county)
-        if year not in years:
-            years.append(year)
-
-    for county in counties:
-        for year in years:
-            pop_sum = 0
-            for datum in data:
-                if county == datum["county"]:
-                    if year == datum["fiscal_year"]:
-                        pop_sum += int(datum["corrections_population"])
-                        full_date = datum["fiscal_year"].split(" ")
-                        date                        = full_date[1]
-
-            data_point = {
-                'county': county,
-                'date': date,
-                'corrections_population': pop_sum
-                }
-
-            data_points.append(data_point)
-
-    return data_points
-"""
 def load(records):
     """
     Construct the document for ElasticSearch
@@ -110,14 +83,11 @@ def load(records):
         'name': 'State Correction Population June 2015 - Current, Corrections',
         'categories': ['demographics','public safety','education'],
         'tags': ['population','re-entry','public safety','corrections','doc'],
-        'data': records
+        'data': records.T.to_dict().values()
     }
 
     with open(DATA_FILE_PATH, 'w') as data_file:
         data_file.write(json.dumps(document))
-
-
-
 
     return document
 
