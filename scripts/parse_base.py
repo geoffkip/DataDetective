@@ -24,17 +24,22 @@ class Translator(object):
     data_url = None
     definition = None
 
-    def __init__(self, definition_path=None):
+    def __init__(self, definition=None, definition_path=None):
         if self.definition == None:
-            with open(definition_path) as data_file:
-                self.definition = json.load(data_file)
+            if definition != None:
+                self.definition = definition
+            elif definition_path != None:
+                with open(definition_path) as data_file:
+                    self.definition = json.load(data_file)
 
     def extract(self, url=None):
         """
         Extracts data from a URL. Returns the data extracted as a list of dictionaries.
         """
-        if url != None:
+        if url is not None:
             self.data_url = url
+        elif self.definition['data_id'] != None:
+            self.data_url = "http://data.pa.gov/resource/%s.json" % self.definition['data_id']
 
         response = urllib2.urlopen(self.data_url)
         extracted_data = json.load(response)
@@ -50,20 +55,21 @@ class Translator(object):
             measure_2: Number
             ...
             measure_n: Number
+
+
         """
 
         data_points = []
         for datum in data:
             data_point = dict()
-
             for key, value in self.definition['data_point'].items():
                 if isinstance(value, (list, tuple)):
                     points = list()
                     for item in value:
                         points.append(self.getDataPoint(item, datum))
-                    data_point[key] = points
+                    data_point[key] = self.transformDataValue(key, points)
                 else:
-                    data_point[key] = self.getDataPoint(value, datum)
+                    data_point[key] = self.transformDataValue(key, self.getDataPoint(value, datum))
 
             data_points.append(data_point)
 
