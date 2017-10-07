@@ -70,9 +70,9 @@ response = s.execute()
 
 body = {
     "aggs": {
-        "measures": {
+        "data": {
             "terms": {
-                "field": "measures"
+                "field": "corrections_population"
             }
         }
     }
