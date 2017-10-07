@@ -31,7 +31,9 @@ COUNTIES_LIST =[{"name": "Adams"},{"name": "Armstrong"},{"name": "Beaver"},
 {"name": "Clinton"},{"name": "McKean"},{"name": "Statewide Project"},
 {"name": "Potter"}]
 
-MEASURES_LIST= All_data[All_data.columns.difference(['county','date'])]
+MEASURES_LIST= [{"name": "corrections_population"}, {"name": "jobs_pledged_to_be_created"},
+{"name": "jobs_pledged_to_be_retained"},{"name": "corrections_population"},
+{"name": "ma_individuals"},{"name": "ma_children"}, {"name": "total_jobs"}]
 
 @app.route('/')
 def index():
@@ -48,7 +50,7 @@ def counties():
 
 @app.route('/measures/list')
 def measures():
-    return jsonify(measures_list),200
+    return jsonify(MEASURES_LIST),200
 
 
 if __name__ == '__main__':
