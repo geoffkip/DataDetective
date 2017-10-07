@@ -14,6 +14,7 @@ import pandas as pd
 import plotly 
 import plotly.plotly as py
 import plotly.graph_objs as go
+from functools import reduce
 plotly.tools.set_credentials_file(username='gjerome1991', api_key='JTNvEeVmv04ADNFHYTIJ')
 
 def columntypes(dataset):
@@ -89,7 +90,8 @@ columntypes(trainings_data)
 
 medicaid_data=pd.DataFrame(res["hits"]["hits"][2]["_source"]["data"])
 medicaid_data["date"]=pd.to_datetime(medicaid_data['date'])
-medicaid_data= medicaid_data.groupby(["county_name", "date"]).sum()
+medicaid_data.rename(columns={'county_name': 'county'}, inplace=True)
+medicaid_data= medicaid_data.groupby(["county", "date"]).sum()
 medicaid_data.reset_index(inplace=True)
 medicaid_data=medicaid_data.sort_values('date')
 columntypes(medicaid_data)
@@ -101,7 +103,14 @@ prison_data.reset_index(inplace=True)
 prison_data=prison_data.sort_values('date')
 columntypes(prison_data)
 
-All_data=pd.concat([jobs_data,trainings_data,medicaid_data,prison_data],axis=1)
+All_data=pd.concat([jobs_data,trainings_data,medicaid_data,prison_data])
+All_data= All_data.sort_values('date')
+
+#==============================================================================
+# dataframes=[jobs_data,prison_data, trainings_data]
+# All_data = reduce(lambda  left,right: pd.merge(left,right,on=['county'],
+#                                             how='outer'), dataframes)
+#==============================================================================
   
 traces = []
 for county in data['county'].unique():
