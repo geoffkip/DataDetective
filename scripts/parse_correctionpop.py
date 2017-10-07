@@ -39,7 +39,6 @@ def transform(data):
         measure_n: Number
     """
     data_points = []
-    finished = []
     county_data_set = []
 
     for datum in data:
