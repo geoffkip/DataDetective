@@ -21,10 +21,11 @@ Transformations:
 """
 
 class Translator(object):
-    data_url = None
+    data_id = None
     definition = None
+    metadata = None
 
-    def __init__(self, definition=None, definition_path=None):
+    def __init__(self, definition=None, definition_path=None, metadata=None):
         if self.definition == None:
             if definition != None:
                 self.definition = definition
@@ -35,16 +36,21 @@ class Translator(object):
     def extract(self, url=None):
         """
         Extracts data from a URL. Returns the data extracted as a list of dictionaries.
+        Also extracts the metadata for the data set and stores it
         """
-        if url is not None:
-            self.data_url = url
-        elif self.definition['data_id'] != None:
-            self.data_url = "http://data.pa.gov/resource/%s.json" % self.definition['data_id']
+        if self.definition['data_id'] != None:
+            self.data_id = self.definition['data_id']
 
-        response = urllib2.urlopen(self.data_url)
-        extracted_data = json.load(response)
+        data_url = "http://data.pa.gov/resource/%s.json" % self.definition['data_id']
+        metadata_url = "http://data.pa.gov/api/views/%s.json" % self.definition['data_id']
 
-        return extracted_data
+        data_response = urllib2.urlopen(data_url)
+        extracted_data = json.load(data_response)
+
+        metadata_response = urllib2.urlopen(metadata_url)
+        metadata = json.load(metadata_response)
+
+        return {"data": extracted_data, "metadata": metadata}
 
     def transform(self, data):
         """
@@ -85,27 +91,30 @@ class Translator(object):
             del path[0]
             value = datum
             for path_item in path:
-                value = value[path_item]
+                if path_item in value.keys():
+                    value = value[path_item]
         else:
             value = path
         return value
 
 
-    def load(records):
+    def load(self, records, metadata):
         """
         Construct the document for ElasticSearch
         """
         document = {
-            'id': 'xmbn-f4c6',
-            'name': 'State Correction Population June 2015 - Current, CorrectionsPublic Safety',
-            'categories': ['Public Safety'],
-            'tags': ['public safety', 're-entry', 'corrections', 'population', 'doc'],
+            'id': metadata['id'],
+            'name': metadata['name'],
+            'category': metadata['category'],
+            'tags': metadata['tags'],
+            'description': metadata['description'],
+            'attribution': metadata['attribution'],
             'data': records
         }
 
         # TODO: Write to ElasticSearch
-        with open(DATA_FILE_PATH, 'w') as data_file:
-            data_file.write(json.dumps(document))
+        # with open(DATA_FILE_PATH, 'w') as data_file:
+        #     data_file.write(json.dumps(document))
 
         return document
 
