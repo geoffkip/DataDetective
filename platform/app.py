@@ -72,8 +72,13 @@ app.layout = html.Div([
 def update_graph(selected_county):
     return {
         'data' : [go.Scatter(
+<<<<<<< HEAD
+                  x= data.date[data['county'] == selected_county],
+                  y= data.total_jobs[data['county'] == selected_county],
+=======
                   x= All_data.date[All_data['county'] == selected_county],
                   y= All_data.total_jobs[All_data['county'] == selected_county],
+>>>>>>> 24d2f42fd3a8e667dee5aeb221a8aa5c0dfd05b7
                   name= selected_county)],
         'layout' : go.Layout(
         xaxis = {
