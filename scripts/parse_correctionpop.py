@@ -10,7 +10,7 @@ Sample:
 {
     "county":"Erie",
     "corrections_population":"2,274",
-    "date":"2014-2015",
+    "date":"11-2015",
 }
 """
 
@@ -32,7 +32,7 @@ def transform(data):
     """
     Parses extracted_data into a list of dictionaries of the DataPoint form:
         county: string
-        date: string (YYYY-YYYY)
+        date: string (MM-YYYY)
         measure_1: Number
         measure_2: Number
         ...
