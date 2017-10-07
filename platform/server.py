@@ -10,7 +10,27 @@ app = Flask(__name__)
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 res = es.search(index="paindex", body={"query": {"match_all": {}}})
 
-COUNTIES_LIST= All_data['county'].unique()
+COUNTIES_LIST =[{"name": "Adams"},{"name": "Armstrong"},{"name": "Beaver"},
+{"name": "Bedford"},{"name": "Statewide"},{"name": "Alleghany"},
+{"name": "Northampton"},{"name": "Luzerne"},{"name": "Lancaster"},
+{"name": "Philadelphia"},{"name": "Washington"},{"name": "Bradford"},
+{"name": "Dauphin"},{"name": "Snyder"},{"name": "Deleware"},
+{"name": "Bucks"},{"name": "Montgomery"},{"name": "Lackawanna"},
+{"name": "Schuylkill"}, {"name": "Mifflin"},{"name": "Franklin"},
+{"name": "Union"},{"name": "York"},{"name": "Lycoming"},
+{"name": "Centre"},{"name": "Blair"},{"name": "Fayette"},
+{"name": "Mercer"},{"name": "Pike"},{"name": "Chester"},
+{"name": "Monroe"},{"name": "Carbon"},{"name": "Indiana"},
+{"name": "Huntingdon"},{"name": "Greene"},{"name": "Forest"},
+{"name": "Wayne"},{"name": "Clearfield"},{"name": "Somerset"},
+{"name": "Crawford"},{"name": "Norhumberland"},{"name": "Berks"},
+{"name": "Tioga"},{"name": "Columbia"},{"name": "Butler"},{"name": "Susquehanna"},
+{"name": "Cameron"},{"name": "Warren"},{"name": "Venango"},
+{"name": "Lebanon"},{"name": "Lawrence"},{"name": "Cambria"},
+{"name": "Montour"},{"name": "Juniata"},{"name": "Jefferson"},
+{"name": "Clinton"},{"name": "McKean"},{"name": "Statewide Project"},
+{"name": "Potter"}]
+
 MEASURES_LIST= All_data[All_data.columns.difference(['county','date'])]
 
 @app.route('/')
@@ -24,7 +44,7 @@ def elasticsearch():
 
 @app.route('/counties/list')
 def counties():
-    return jsonify(counties_list),200
+    return jsonify(COUNTIES_LIST),200
 
 @app.route('/measures/list')
 def measures():
