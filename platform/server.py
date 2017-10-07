@@ -1,9 +1,25 @@
-from flask import Flask
+from flask import Flask, render_template, request, session, redirect, url_for
+from flask.ext.elasticsearch import FlaskElasticsearch
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import *
+from flask import jsonify
+
 app = Flask(__name__)
 
-@app.route("/")
+#Initialize elasticsearch with flask app
+es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+
+@app.route('/')
 def index():
-    return render_template('views/index.html')
+    return 'Data Detective App'
+
+#Test to see if data prints out
+@app.route('/elasticsearch')
+def elasticsearch():
+    s = Search(using=es)
+    res = es.search(index="paindex", body={"query": {"match_all": {}}})
+    return jsonify(res)
+
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run(debug=True)
