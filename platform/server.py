@@ -52,6 +52,10 @@ def counties():
 def measures():
     return jsonify(MEASURES_LIST),200
 
+@app.route('/chart/line')
+def chart():
+    return jsonify(MEASURES_LIST),200
+
 
 if __name__ == '__main__':
     app.run(debug=True)
