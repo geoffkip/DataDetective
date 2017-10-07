@@ -14,7 +14,7 @@ Sample:
 }
 """
 
-DATA_FILE_PATH = 'corrections_pop.json'
+DATA_FILE_PATH = 'data/corrections_pop.json'
 
 def extract():
     """
@@ -86,6 +86,7 @@ def load(records):
         'name': 'State Correction Population June 2015 - Current, Corrections',
         'categories': ['demographics','public safety','education'],
         'tags': ['population','re-entry','public safety','corrections','doc'],
+        'measures': ['corrections_population'],
         'data': records.T.to_dict().values()
     }
 

@@ -25,7 +25,7 @@ def extract():
     """
     Extracts data from a URL. Returns the data extracted as a list of dictionaries.
     """
-    URL = 'https://data.pa.gov/resource/efrh-6mcn.json'
+    URL = 'http://data.pa.gov/resource/efrh-6mcn.json'
     response = urllib2.urlopen(URL)
     extracted_data  = json.load(response)
 
@@ -67,6 +67,7 @@ def load(records):
         'name': 'State Correction Population June 2015 - Current, CorrectionsPublic Safety',
         'categories': ['Public Safety'],
         'tags': ['public safety', 're-entry', 'corrections', 'population', 'doc'],
+        'measures': ['corrections_population'],
         'data': records
     }
 

@@ -73,6 +73,7 @@ def load(records):
         'name': 'Medical Assistance Enrollment July 2003 - Current Human Services',
         'categories': ['social services,finance,health'],
         'tags': ['assistance,medical,insurance,medicaid,ma,dhs,enroll,health'],
+        'measures': ['ma_children','ma_individuals'],
         'data': records
     }
 
