@@ -2,3 +2,10 @@ pandas
 numpy
 openpyxl
 flask
+dash
+elasticsearch
+elasticsearch_dsl
+plotly
+dash_renderer
+dash_core_components
+dash_html_components
