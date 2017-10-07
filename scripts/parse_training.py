@@ -52,7 +52,7 @@ def extract():
     """
     Extracts data from a URL. Returns the data extracted as a pandas DataFrame.
     """
-    URL = 'http://data.pa.gov/resource/85zg-97y3.json'
+    URL = 'http://data.pa.gov/resource/gqf2-rjtp.json'
     response = urllib2.urlopen(URL)
     extracted_data  = json.load(response)
 
@@ -95,6 +95,10 @@ def transform(data):
     training_dataframe = training_dataframe.groupby(["county", "year_end"]).agg(agg_function)
 
     pprint(training_dataframe)
+    writer = pd.ExcelWriter('data/WDA_performance_2014.xlsx')
+    training_dataframe.to_excel(writer,'2014')
+    writer.save()
+
 
     # for datum in data:
     #     county =

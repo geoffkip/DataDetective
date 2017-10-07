@@ -1,0 +1,12 @@
+{
+	"translator_name": "YYYYY",
+	"translation_source": "https://",
+	"data_point": {
+		"date": ["data_point.year", "data_point.month"],
+		"country": "UnitedStates",
+		"state_code": "PA",
+		"county": "data_point.countyname",
+		"jobs_retained": "data_point.jobs_pledged_to_be_retained",
+		"jobs_total": "data_point.total_jobs"
+	}
+}

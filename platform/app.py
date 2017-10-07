@@ -10,13 +10,36 @@ import pandas as pd
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 res = es.search(index="paindex", body={"query": {"match_all": {}}})
-data=pd.DataFrame(res["hits"]["hits"][0]["_source"]["data"])
-data["date"]=pd.to_datetime(data['date'])
-data= data.groupby(["county", "date"]).sum()
-data.reset_index(inplace=True)
-data=data.sort_values('date')
+jobs_data=pd.DataFrame(res["hits"]["hits"][0]["_source"]["data"])
+jobs_data["date"]=pd.to_datetime(jobs_data['date'])
+jobs_data= jobs_data.groupby(["county", "date"]).sum()
+jobs_data.reset_index(inplace=True)
+jobs_data=jobs_data.sort_values('date')
 
-counties= data['county'].unique()
+trainings_data=pd.DataFrame(res["hits"]["hits"][1]["_source"]["data"])
+# trainings_data["date"]=pd.to_datetime(trainings_data['date'])
+# trainings_data= trainings_data.groupby(["county", "date"]).sum()
+# trainings_data.reset_index(inplace=True)
+# trainings_data=trainings_data.sort_values('date')
+
+medicaid_data=pd.DataFrame(res["hits"]["hits"][2]["_source"]["data"])
+medicaid_data["date"]=pd.to_datetime(medicaid_data['date'])
+medicaid_data.rename(columns={'county_name': 'county'}, inplace=True)
+medicaid_data= medicaid_data.groupby(["county", "date"]).sum()
+medicaid_data.reset_index(inplace=True)
+medicaid_data=medicaid_data.sort_values('date')
+
+prison_data=pd.DataFrame(res["hits"]["hits"][3]["_source"]["data"])
+prison_data["date"]=pd.to_datetime(prison_data['date'])
+prison_data= prison_data.groupby(["county", "date"]).sum()
+prison_data.reset_index(inplace=True)
+prison_data=prison_data.sort_values('date')
+
+All_data=pd.concat([jobs_data,trainings_data,medicaid_data,prison_data])
+All_data= All_data.sort_values('date')
+
+counties= All_data['county'].unique()
+measures= All_data[All_data.columns.difference(['county','date'])]
 
 app = dash.Dash()
 
@@ -32,15 +55,11 @@ app.layout = html.Div([
         value=['Philadelphia']
     ),
 
-    html.Label('Measure'),
+    html.Label('Measures'),
     dcc.Dropdown(
-        id='Measure',
-        options=[
-            { 'label': 'Jobs', 'value': 'Jobs'},
-            {'label': 'Schools', 'value': 'Schools'}
-        ],
-        value=['Jobs', 'Schools'],
-        multi=True
+        id='measures',
+        options=[{'label': i, 'value': i} for i in measures],
+        value=['total_jobs']
     )]),
 
     dcc.Graph(
@@ -53,8 +72,13 @@ app.layout = html.Div([
 def update_graph(selected_county):
     return {
         'data' : [go.Scatter(
+<<<<<<< HEAD
                   x= data.date[data['county'] == selected_county],
                   y= data.total_jobs[data['county'] == selected_county],
+=======
+                  x= All_data.date[All_data['county'] == selected_county],
+                  y= All_data.total_jobs[All_data['county'] == selected_county],
+>>>>>>> 24d2f42fd3a8e667dee5aeb221a8aa5c0dfd05b7
                   name= selected_county)],
         'layout' : go.Layout(
         xaxis = {
