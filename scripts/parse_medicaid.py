@@ -28,7 +28,7 @@ def extract():
     """
     Extracts data from a URL. Returns the data extracted as a pandas DataFrame.
     """
-    URL = 'https://data.pa.gov/resource/4c6y-b2hg.json'
+    URL = 'http://data.pa.gov/resource/4c6y-b2hg.json'
     response = urllib2.urlopen(URL)
     extracted_data  = json.load(response)
 
@@ -55,7 +55,7 @@ def transform(data):
         ma_individuals = int(datum["ma_individuals"])
 
         data_point = {
-            'county_name': county,
+            'county': county,
             'date': date,
             'ma_children': ma_children,
             'ma_individuals': ma_individuals}

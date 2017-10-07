@@ -16,8 +16,6 @@ Sample:
 
 DATA_FILE_PATH = 'corrections_pop.json'
 
-
-
 def extract():
     """
     Extracts data from a URL. Returns the data extracted as a dictionary.
