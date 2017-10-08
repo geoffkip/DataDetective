@@ -68,9 +68,30 @@ es.indices.refresh(index="paindex")
 s = s.query("multi_match", query='d5pf-ti7w', fields=['id'])
 response = s.execute()
 
-res = es.search(index="paindex", body={"query": {"match_all": {}}})
+body = {
+    "aggs": {
+        "data": {
+            "terms": {
+                "field": "corrections_population"
+            }
+        }
+    }
+}
+
+res = es.search(index="paindex", body=body)
 print("%d documents found" % res['hits']['total'])
 print(res)
+
+
+            
+results=[]
+for i in range(len(res)):
+    feed=res["hits"]["hits"][i]["_source"]["categories"]
+    results.append(feed)
+    
+    
+    
+    
 
 #example how to access measures from loaded data in elasticsearch database
 # NOTE: You can't always assume that they will come out in order like this.

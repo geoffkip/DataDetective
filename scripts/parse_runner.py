@@ -1,4 +1,4 @@
-
+import urllib2
 import json
 
 definitions_path = 'data/translator_definitions.json'
@@ -11,10 +11,13 @@ for definition in definitions:
     # print json.dumps(definition)
     module = __import__(definition['translation_file'])
     class_ = getattr(module, definition['translation_class'])
+
     translator = class_(definition=definition)
 
     data = translator.extract()
-    transformed = translator.transform(data)
+    transformed = translator.transform(data['data'])
+    document = translator.load(transformed, data['metadata'])
 
-    print json.dumps(transformed)
+    print json.dumps(document)
+
 
