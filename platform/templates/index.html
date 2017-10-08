@@ -5,7 +5,7 @@
 <br>
 
 <div class="row" id="">
-  <div class="col-md-6">
+  <div class="col-md-5">
     <div class="form-group">
       <label for="measures">Measures</label>
       <select width="50%" class="form-control" id="measures-select" name="state" multiple="multiple">
@@ -18,18 +18,14 @@
       </select>
     </div>
   </div>
-  <div class="col-md-3">
-    <div class="form-group">
-      <label id="year-label" for="measures">Year</label><br>
-      <input id="year-slider" class="form-control" width="100%" data-slider-id='year-slider' type="text" data-slider-min="2010" data-slider-max="2017" data-slider-step="1" data-slider-value="2015"/>
-    </div>
+  <div class="col-md-2">
   </div>
-  <div class="col-md-3">
-    <div class="form-group">
-      <label id="month-label" for="measures">Month</label><br>
-      <input id="month-slider" class="form-control" width="100%" data-slider-id='month-slider' type="text" data-slider-min="1" data-slider-max="12" data-slider-step="1" data-slider-value="6"/>
-    </div>
+  <div class="col-md-5">
+    <label for="recommended-measures">Recommendedations</label>
+    <br>
+    <span class="badge badge-primary">SNAP Individuals</span>&nbsp;<span class="badge badge-primary">SNAP Dollars</span>&nbsp;<span class="badge badge-primary">Medicaid Population</span>
   </div>
+
 </div>
 <!-- <div class="row">
   <div class="col-md-12">
@@ -45,31 +41,40 @@
 </div>
 
 <script>
-var charts = []; // A list of charts on the page
-var chartsCount = 0; // A list of charts on the page
+var charts = {}; // A list of charts on the page
+/*
+SAMPLE OF charts DATA STRUCTURE:
+{
+  "snap_individuals": {
+    chart: chartObject,
+    data: {
+      "2017": {
+        "01": [...],
+        "02": [...],
+        ...
+        "12": [...]
+      },
+      "2016": {
+        "01": [...],
+        "02": [...],
+        ...
+        "12": [...]
+      }
+    }
+  },
+  "snap_dollars": {
+    chart: chartObject,
+    data {
+      "2017": 4000000,
+      "2016": 4000000
+    }
+  }
+}
+
+
+*/
 
 $(document).ready(function() {
-  // SETEP YEAR AND MONTH SLIDER
-  var yearslider = $('#year-slider').slider({
-  	formatter: function(value) {
-  		return 'Current value: ' + value;
-  	}
-  }).data('slider');
-  var monthslider = $('#month-slider').slider({
-  	formatter: function(value) {
-  		return 'Current value: ' + value;
-  	}
-  }).data('slider');
-  $("#year-label").text("Year: " + yearslider.getValue())
-  $("#month-label").text("Month: " + monthslider.getValue())
-
-  yearslider.on('slide', function(){
-    $("#year-label").text("Year: " + yearslider.getValue())
-  })
-  monthslider.on('slide', function(){
-    $("#month-label").text("Month: " + monthslider.getValue())
-  })
-
   // SETUP MEASURE SELECTION
   $('#measures-select').select2();
   $("#measures-select")
@@ -82,7 +87,7 @@ $(document).ready(function() {
 
       // Step 3: Create the charts
       $("#geo-charts").empty();
-      charts = [];
+      charts = {};
       layout = [12,6,4,6,4,4]
       minHeights = [500, 400, 300, 300, 300, 300]
 
@@ -95,9 +100,14 @@ $(document).ready(function() {
         var id = "chart"+ (i+1);
         var title = data[i].text;
         var chart = newGeoChart(id, title);
-        charts.push(chart);
+        charts[title.replace(' ', '_').toLowerCase()] = {
+          chart: chart,
+          data: {} // TODO populate with chart's data
+        };
 
       }
+
+      console.log(charts)
 
     })
 
@@ -211,6 +221,7 @@ var newGeoChart = function(id, title) {
       }]
   });
 }
+
 </script>
 
 {% endblock %}
