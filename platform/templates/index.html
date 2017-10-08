@@ -1,242 +1,216 @@
 {% extends "layout.html" %}
 {% block body %}
+<br>
+<br>
+<br>
 
-<div class="row">
-  <div class="col-md-8">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div id="line-chart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
-      </div>
+<div class="row" id="">
+  <div class="col-md-6">
+    <div class="form-group">
+      <label for="measures">Measures</label>
+      <select width="50%" class="form-control" id="measures-select" name="state" multiple="multiple">
+        <option value="SNAP Individuals">SNAP Individuals</option>
+        <option value="SNAP Dollars">SNAP Dollars</option>
+        <option value="Jobs Created">Jobs Created</option>
+        <option value="SNAP Individuals">SNAP Individuals</option>
+        <option value="SNAP Dollars">SNAP Dollars</option>
+        <option value="Jobs Created">Jobs Created</option>
+      </select>
     </div>
   </div>
-  <div class="col-md-4">
-    <div class="row">
-      <div class="col-md-12">
-        <div id="geo-chart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
-      </div>
-      <div class="col-md-12">
-        <div id="column-chart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
-      </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label id="year-label" for="measures">Year</label><br>
+      <input id="year-slider" class="form-control" width="100%" data-slider-id='year-slider' type="text" data-slider-min="2010" data-slider-max="2017" data-slider-step="1" data-slider-value="2015"/>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="form-group">
+      <label id="month-label" for="measures">Month</label><br>
+      <input id="month-slider" class="form-control" width="100%" data-slider-id='month-slider' type="text" data-slider-min="1" data-slider-max="12" data-slider-step="1" data-slider-value="6"/>
     </div>
   </div>
 </div>
+<!-- <div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div id="line-chart" style="min-width: 400px; height: 100px; margin: 0 auto"></div>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="row" id="geo-charts">
+
+</div>
 
 <script>
+var charts = []; // A list of charts on the page
+var chartsCount = 0; // A list of charts on the page
 
-var linechart = Highcharts.chart('line-chart', {
-    chart: {
-        zoomType: 'xy'
-    },
-    title: {
-        text: null
-    },
-    xAxis: [{
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        crosshair: true
-    }],
-    yAxis: [{ // Primary yAxis
-        labels: {
-            format: '{value}°C',
-            style: {
-                color: Highcharts.getOptions().colors[2]
-            }
-        },
-        title: {
-            text: 'Temperature',
-            style: {
-                color: Highcharts.getOptions().colors[2]
-            }
-        },
-        opposite: true
+$(document).ready(function() {
+  // SETEP YEAR AND MONTH SLIDER
+  var yearslider = $('#year-slider').slider({
+  	formatter: function(value) {
+  		return 'Current value: ' + value;
+  	}
+  }).data('slider');
+  var monthslider = $('#month-slider').slider({
+  	formatter: function(value) {
+  		return 'Current value: ' + value;
+  	}
+  }).data('slider');
+  $("#year-label").text("Year: " + yearslider.getValue())
+  $("#month-label").text("Month: " + monthslider.getValue())
 
-    }, { // Secondary yAxis
-        gridLineWidth: 0,
-        title: {
-            text: 'Rainfall',
-            style: {
-                color: Highcharts.getOptions().colors[0]
-            }
-        },
-        labels: {
-            format: '{value} mm',
-            style: {
-                color: Highcharts.getOptions().colors[0]
-            }
-        }
+  yearslider.on('slide', function(){
+    $("#year-label").text("Year: " + yearslider.getValue())
+  })
+  monthslider.on('slide', function(){
+    $("#month-label").text("Month: " + monthslider.getValue())
+  })
 
-    }, { // Tertiary yAxis
-        gridLineWidth: 0,
-        title: {
-            text: 'Sea-Level Pressure',
-            style: {
-                color: Highcharts.getOptions().colors[1]
-            }
-        },
-        labels: {
-            format: '{value} mb',
-            style: {
-                color: Highcharts.getOptions().colors[1]
-            }
-        },
-        opposite: true
-    }],
-    tooltip: {
-        shared: true
-    },
-    legend: {
-        layout: 'vertical',
-        align: 'left',
-        x: 80,
-        verticalAlign: 'top',
-        y: 55,
-        floating: true,
-        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
-    },
-    series: [{
-        name: 'Rainfall',
-        type: 'column',
-        yAxis: 1,
-        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
-        tooltip: {
-            valueSuffix: ' mm'
-        }
+  // SETUP MEASURE SELECTION
+  $('#measures-select').select2();
+  $("#measures-select")
+    .on('change', function (e) {
+      var data = $('#measures-select').select2('data');
+      var chartsCount = data.length;
+      // Step 1: Fetch all the data for this measure
 
-    }, {
-        name: 'Sea-Level Pressure',
-        type: 'spline',
-        yAxis: 2,
-        data: [1016, 1016, 1015.9, 1015.5, 1012.3, 1009.5, 1009.6, 1010.2, 1013.1, 1016.9, 1018.2, 1016.7],
-        marker: {
-            enabled: false
-        },
-        dashStyle: 'shortdot',
-        tooltip: {
-            valueSuffix: ' mb'
-        }
+      // Step 2: Build the time-series of data
 
-    }, {
-        name: 'Temperature',
-        type: 'spline',
-        data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
-        tooltip: {
-            valueSuffix: ' °C'
-        }
-    }]
+      // Step 3: Create the charts
+      $("#geo-charts").empty();
+      charts = [];
+      layout = [12,6,4,6,4,4]
+      minHeights = [500, 400, 300, 300, 300, 300]
+
+      for(var i = 0; i < chartsCount; i++) {
+
+        // TODO: Dynamically size the charts, dynamically resize the charts
+
+
+        $("#geo-charts").append('<div id="chart'+(i+1)+'" class="col-md-'+layout[chartsCount-1]+'" style="min-height: '+minHeights[chartsCount-1]+'px; margin: 0 auto"></div>');
+        var id = "chart"+ (i+1);
+        var title = data[i].text;
+        var chart = newGeoChart(id, title);
+        charts.push(chart);
+
+      }
+
+    })
+
 });
-
-
-var data = [
-    ['us-pa-015', 0],
-    ['us-pa-117', 1],
-    ['us-pa-027', 2],
-    ['us-pa-035', 3],
-    ['us-pa-061', 4],
-    ['us-pa-009', 5],
-    ['us-pa-075', 6],
-    ['us-pa-029', 7],
-    ['us-pa-011', 8],
-    ['us-pa-083', 9],
-    ['us-pa-047', 10],
-    ['us-pa-005', 11],
-    ['us-pa-019', 12],
-    ['us-pa-007', 13],
-    ['us-pa-067', 14],
-    ['us-pa-099', 15],
-    ['us-pa-053', 16],
-    ['us-pa-123', 17],
-    ['us-pa-121', 18],
-    ['us-pa-033', 19],
-    ['us-pa-063', 20],
-    ['us-pa-107', 21],
-    ['us-pa-079', 22],
-    ['us-pa-055', 23],
-    ['us-pa-001', 24],
-    ['us-pa-089', 25],
-    ['us-pa-069', 26],
-    ['us-pa-093', 27],
-    ['us-pa-081', 28],
-    ['us-pa-095', 29],
-    ['us-pa-025', 30],
-    ['us-pa-065', 31],
-    ['us-pa-003', 32],
-    ['us-pa-129', 33],
-    ['us-pa-021', 34],
-    ['us-pa-013', 35],
-    ['us-pa-039', 36],
-    ['us-pa-023', 37],
-    ['us-pa-097', 38],
-    ['us-pa-043', 39],
-    ['us-pa-077', 40],
-    ['us-pa-091', 41],
-    ['us-pa-131', 42],
-    ['us-pa-113', 43],
-    ['us-pa-037', 44],
-    ['us-pa-045', 45],
-    ['us-pa-119', 46],
-    ['us-pa-087', 47],
-    ['us-pa-031', 48],
-    ['us-pa-085', 49],
-    ['us-pa-071', 50],
-    ['us-pa-049', 51],
-    ['us-pa-041', 52],
-    ['us-pa-127', 53],
-    ['us-pa-017', 54],
-    ['us-pa-059', 55],
-    ['us-pa-051', 56],
-    ['us-pa-101', 57],
-    ['us-pa-103', 58],
-    ['us-pa-115', 59],
-    ['us-pa-125', 60],
-    ['us-pa-105', 61],
-    ['us-pa-109', 62],
-    ['us-pa-111', 63],
-    ['us-pa-057', 64],
-    ['us-pa-073', 65],
-    ['us-pa-133', 66]
-];
 
 // Create the chart
-var geochart = Highcharts.mapChart('geo-chart', {
-    chart: {
-        map: 'countries/us/us-pa-all'
-    },
+var newGeoChart = function(id, title) {
+  var data = [
+      ['us-pa-015', 0],
+      ['us-pa-117', 1],
+      ['us-pa-027', 2],
+      ['us-pa-035', 3],
+      ['us-pa-061', 4],
+      ['us-pa-009', 5],
+      ['us-pa-075', 6],
+      ['us-pa-029', 7],
+      ['us-pa-011', 8],
+      ['us-pa-083', 9],
+      ['us-pa-047', 10],
+      ['us-pa-005', 11],
+      ['us-pa-019', 12],
+      ['us-pa-007', 13],
+      ['us-pa-067', 14],
+      ['us-pa-099', 15],
+      ['us-pa-053', 16],
+      ['us-pa-123', 17],
+      ['us-pa-121', 18],
+      ['us-pa-033', 19],
+      ['us-pa-063', 20],
+      ['us-pa-107', 21],
+      ['us-pa-079', 22],
+      ['us-pa-055', 23],
+      ['us-pa-001', 24],
+      ['us-pa-089', 25],
+      ['us-pa-069', 26],
+      ['us-pa-093', 27],
+      ['us-pa-081', 28],
+      ['us-pa-095', 29],
+      ['us-pa-025', 30],
+      ['us-pa-065', 31],
+      ['us-pa-003', 32],
+      ['us-pa-129', 33],
+      ['us-pa-021', 34],
+      ['us-pa-013', 35],
+      ['us-pa-039', 36],
+      ['us-pa-023', 37],
+      ['us-pa-097', 38],
+      ['us-pa-043', 39],
+      ['us-pa-077', 40],
+      ['us-pa-091', 41],
+      ['us-pa-131', 42],
+      ['us-pa-113', 43],
+      ['us-pa-037', 44],
+      ['us-pa-045', 45],
+      ['us-pa-119', 46],
+      ['us-pa-087', 47],
+      ['us-pa-031', 48],
+      ['us-pa-085', 49],
+      ['us-pa-071', 50],
+      ['us-pa-049', 51],
+      ['us-pa-041', 52],
+      ['us-pa-127', 53],
+      ['us-pa-017', 54],
+      ['us-pa-059', 55],
+      ['us-pa-051', 56],
+      ['us-pa-101', 57],
+      ['us-pa-103', 58],
+      ['us-pa-115', 59],
+      ['us-pa-125', 60],
+      ['us-pa-105', 61],
+      ['us-pa-109', 62],
+      ['us-pa-111', 63],
+      ['us-pa-057', 64],
+      ['us-pa-073', 65],
+      ['us-pa-133', 66]
+  ];
+  var geochart = Highcharts.mapChart(id, {
+      chart: {
+          map: 'countries/us/us-pa-all'
+      },
+      title: {
+          text: null
+      },
+      subtitle: {
+          text: title
+      },
 
-    title: {
-        text: 'Highmaps basic demo'
-    },
+      mapNavigation: {
+          enabled: false,
+          buttonOptions: {
+              verticalAlign: 'bottom'
+          }
+      },
 
-    subtitle: {
-        text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/us/us-pa-all.js">Pennsylvania</a>'
-    },
+      colorAxis: {
+          min: 0
+      },
 
-    mapNavigation: {
-        enabled: true,
-        buttonOptions: {
-            verticalAlign: 'bottom'
-        }
-    },
-
-    colorAxis: {
-        min: 0
-    },
-
-    series: [{
-        data: data,
-        name: 'Random data',
-        states: {
-            hover: {
-                color: '#BADA55'
-            }
-        },
-        dataLabels: {
-            enabled: true,
-            format: '{point.name}'
-        }
-    }]
-});
-
-
+      series: [{
+          data: data,
+          name: 'Random data',
+          states: {
+              hover: {
+                  color: '#BADA55'
+              }
+          },
+          dataLabels: {
+              enabled: true,
+              format: '{point.name}'
+          }
+      }]
+  });
+}
 </script>
 
 {% endblock %}
