@@ -69,14 +69,12 @@ def transform(data):
     county_data_set = []
 
     for datum in data:
+        handicap = 0
+        parking = 0
         if 'handicap_space_count' in datum.keys():
             handicap = int(datum['handicap_space_count'])
-        else:
-            handicap = 0
         if 'parking_space_count' in datum.keys():
             parking = int(datum['parking_space_count'])
-        else:
-            parking = 0
         county_datum = {
             "handicap_space_count": handicap,
             "county": CODE_COUNTY[datum['county_code']],
@@ -86,7 +84,7 @@ def transform(data):
         county_data_set.append(county_datum)
 
 
-    #pprint(county_data_set)
+    pprint(county_data_set)
 
     correction_dataframe = pd.DataFrame.from_dict(county_data_set)
 
@@ -96,10 +94,11 @@ def transform(data):
     agg_function_sum = {'parking_space_count': ['sum'],'handicap_space_count': ['sum'],'park_and_ride_count': ['sum']}
     correction_dataframe = correction_dataframe.groupby(["county"]).agg(agg_function_sum)
 
+
     pprint(correction_dataframe)
     correction_dataframe.reset_index(inplace=True)
     print(correction_dataframe.columns)
-    correction_dataframe.columns = pd.Index(['county','park_and_ride_count','parking_space_count','handicap_space_count'])
+    correction_dataframe.columns = pd.Index(['county','park_and_ride_count','handicap_space_count','parking_space_count'])
     pprint(correction_dataframe)
     return correction_dataframe
 
