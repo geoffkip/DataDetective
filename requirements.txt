@@ -3,6 +3,7 @@ numpy
 openpyxl
 flask
 dash
+requests
 elasticsearch
 elasticsearch_dsl
 plotly
