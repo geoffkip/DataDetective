@@ -6,10 +6,6 @@ import pandas as pd
 
 app = Flask(__name__)
 
-#Initialize elasticsearch with flask app
-es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
-res = es.search(index="paindex", body={"query": {"match_all": {}}})
-
 COUNTIES_LIST =[{"name": "Adams"},{"name": "Armstrong"},{"name": "Beaver"},
 {"name": "Bedford"},{"name": "Statewide"},{"name": "Alleghany"},
 {"name": "Northampton"},{"name": "Luzerne"},{"name": "Lancaster"},
@@ -38,11 +34,6 @@ MEASURES_LIST= [{"name": "corrections_population"}, {"name": "jobs_pledged_to_be
 @app.route('/')
 def index():
     return render_template('index.html')
-
-#Test to see if data prints out
-@app.route('/elasticsearch')
-def elasticsearch():
-    return jsonify(res),200
 
 @app.route('/counties/list')
 def counties():
