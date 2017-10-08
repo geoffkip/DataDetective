@@ -7,7 +7,7 @@ import pandas as pd
 app = Flask(__name__)
 
 #Initialize elasticsearch with flask app
-es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+es = Elasticsearch('http://elastic:changeme@localhost:9200')
 res = es.search(index="paindex", body={"query": {"match_all": {}}})
 
 COUNTIES_LIST =[{"name": "Adams"},{"name": "Armstrong"},{"name": "Beaver"},
@@ -51,6 +51,20 @@ def counties():
 @app.route('/measures/list')
 def measures():
     return jsonify(MEASURES_LIST),200
+	
+@app.route('/measures/recommend', methods=['GET'])
+def recommender():
+   tags = request.args.get('tags').split(',')
+   categories = request.args.get('categories').split(',')
+   shouldList = []
+   for tag in tags:
+       shouldList.append({"fuzzy": {"tags": {"value" : tag}}})
+   for category in categories:
+       shouldList.append({"fuzzy": {"tags": {"value" : category}}})
+   res = es.search(index="paindex", body={"query":{"bool": {"should": shouldList }}})
+#   res = es.search(index="paindex", body={"query": {"fuzzy": {"tags": {"value" : ["community","economy"]}}}})
+   return jsonify(res),200
+	
 
 @app.route('/chart/line')
 def chart():
