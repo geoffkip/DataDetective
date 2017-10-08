@@ -24,7 +24,7 @@ def columntypes(dataset):
 # make sure ES is up and running
 res = requests.get('http://localhost:9200')
 print(res.content)
-es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+es = Elasticsearch('http://elastic:changeme@localhost:9200')
 s = Search(using=es)
 
 #load real data
@@ -33,19 +33,35 @@ es.indices.delete(index='paindex')
 
 # NOTE: Run this program from the project root
 with open("data/jobs.json") as jobs_data:
-    PA_jobs = json.load(jobs_data)
+    data = json.load(jobs_data)
+    PA_jobs = {'external_id': data["id"],'tags': data["tags"],'categories':data["categories"]}
     print(PA_jobs)
 
 with open("data/trainings.json") as trainings_data:
-    PA_trainings = json.load(trainings_data)
+    data = json.load(trainings_data) 
+    PA_trainings = {
+		'external_id': data["id"],
+		'tags': data["tags"],
+		'categories':data["categories"]
+	}
     print(PA_trainings)
 
 with open("data/medicaid.json") as medicaid_data:
-    PA_medicaid = json.load(medicaid_data)
+    data = json.load(medicaid_data)
+    PA_medicaid = {
+		'external_id': data["id"],
+		'tags': data["tags"],
+		'categories':data["categories"]
+	}
     print(PA_medicaid)
 
 with open("data/prisons.json") as prisons_data:
-    PA_prisons = json.load(prisons_data)
+    data = json.load(prisons_data)
+    PA_prisons = {
+		'external_id': data["id"],
+		'tags': data["tags"],
+		'categories':data["categories"]
+	}
     print(PA_prisons)
 
 res= es.index(index="paindex", doc_type='PA', body=PA_jobs)
@@ -85,7 +101,7 @@ print(res)
 
             
 results=[]
-for i in range(len(res)):
+for i in range(res['hits']['total']):
     feed=res["hits"]["hits"][i]["_source"]["categories"]
     results.append(feed)
     
