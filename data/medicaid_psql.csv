@@ -1,4 +1,4 @@
-county,date,json,data_set_id
+county,date,measures,data_set_id
 Statewide,2003-07-01,"{""ma_children"":794109,""ma_individuals"":1568331}",2
 Statewide,2003-08-01,"{""ma_children"":802259,""ma_individuals"":1583604}",2
 Statewide,2003-09-01,"{""ma_children"":806974,""ma_individuals"":1593909}",2

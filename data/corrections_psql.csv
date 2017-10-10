@@ -1,4 +1,4 @@
-county,date,json,data_set_id
+county,date,measures,data_set_id
 Allegheny,01-2016,"{""corrections_population"":1677}",4
 Allegheny,01-2017,"{""corrections_population"":1880}",4
 Allegheny,02-2016,"{""corrections_population"":1787}",4

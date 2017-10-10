@@ -1,4 +1,4 @@
-county,date,json,data_set_id
+county,date,measures,data_set_id
 N/A,2015-08-31,"{""corrections_population"":900}",3
 N/A,2015-11-30,"{""corrections_population"":7}",3
 N/A,2015-06-30,"{""corrections_population"":336}",3

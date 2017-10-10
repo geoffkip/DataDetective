@@ -21,7 +21,7 @@ def parse_json(data):
         data=data_measures.loc[i].to_json()
         results.append(data)
     measures=pd.DataFrame(results)
-    measures.columns=['json']
+    measures.columns=['measures']
     data= pd.merge(data_info, measures, how='left', left_index=True, right_index=True)
     return data
 

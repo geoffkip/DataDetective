@@ -1,4 +1,4 @@
-county,date,json,data_set_id
+county,date,measures,data_set_id
 Statewide,2004-01-01,"{""snap_dollars"":74577052.0,""snap_individuals"":914902.0}",5
 Statewide,2004-02-01,"{""snap_dollars"":76097221.0,""snap_individuals"":948923.0}",5
 Statewide,2004-03-01,"{""snap_dollars"":76375983.0,""snap_individuals"":958039.0}",5

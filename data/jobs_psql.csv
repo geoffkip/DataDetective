@@ -1,4 +1,4 @@
-county,date,json,data_set_id
+county,date,measures,data_set_id
 Luzerne,2016-07-01,"{""jobs_pledged_to_be_created"":0,""jobs_pledged_to_be_retained"":33,""total_jobs"":33}",1
 Adams,2016-04-01,"{""jobs_pledged_to_be_created"":0,""jobs_pledged_to_be_retained"":4,""total_jobs"":4}",1
 Allegheny,2015-12-01,"{""jobs_pledged_to_be_created"":814,""jobs_pledged_to_be_retained"":0,""total_jobs"":814}",1
