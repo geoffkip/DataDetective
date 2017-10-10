@@ -7,14 +7,14 @@ Created on Sun Oct  8 12:49:52 2017
 """
 
 import json
+import pandas as pd
 
 def without_keys(d, keys):
       return {x: d[x] for x in d if x not in keys}
 
 def parse_json(data):
     for i in range(len(data["data"])):
-        data[i]= {"id": data["id"],
-           "county": data["data"][i]["county"],
+        data[i]= {"county": data["data"][i]["county"],
            "date": data["data"][i]["date"],
            "json": without_keys(data["data"][i],invalid)}
 
@@ -45,6 +45,18 @@ with open("data/snap.json") as snap_data:
 invalid= {"county","date"}      
 exclude= {"categories","data", "tags", "name", "id", "measures"}
 
+PA_jobs=pd.DataFrame(PA_jobs['data'])
+PA_jobs_measures= PA_jobs.iloc[:,2:5]
+PA_jobs_info= PA_jobs.iloc[:,0:2]
+results=[]
+for i in PA_jobs_measures.index:
+    #print(temporary_Data.loc[i])
+    data=PA_jobs_measures.loc[i].to_json()
+    results.append(data)
+measures=pd.DataFrame(results)
+measures.columns=['json']
+PA_jobs = pd.merge(PA_jobs_info, measures, how='left', left_index=True, right_index=True)
+
 #Create datasets for loading into postgressql
 Jobs_datasets= without_keys(PA_jobs,{"data"})
 Trainings_datasets= without_keys(PA_trainings,{"data"})
@@ -67,3 +79,5 @@ Medicaid_data_points= without_keys(PA_medicaid,exclude)
 Prisons_data_points= without_keys(PA_prisons,exclude)
 Corrections_data_points= without_keys(PA_corrections,exclude)
 Snap_data_points= without_keys(PA_snap,exclude)
+
+#To do load these datasets into postgresql database
