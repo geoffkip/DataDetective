@@ -1,7 +1,11 @@
+-- Create table schema for data points
 CREATE TABLE data_points(
     id SERIAL,
     data_set_id integer,
     county text,
-    date datetime,
+    date date,
     measures json
 );
+-- Import csv to insert data points values into tables
+COPY data_points(county,date,measures,data_set_id)
+FROM 'data\jobs_psql.csv' DELIMITER ',' CSV HEADER;
