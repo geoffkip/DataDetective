@@ -70,5 +70,12 @@ Corrections_data_points= parse_json(PA_corrections)
 Corrections_data_points["data_set_id"] = 4
 Snap_data_points= parse_json(PA_snap)
 Snap_data_points["data_set_id"] = 5
+                
+ #Export as csvs
+Jobs_data_points.to_csv("data/jobs_psql.csv", sep=',', encoding='utf-8',index=False)               
+Medicaid_data_points.to_csv("data/medicaid_psql.csv", sep=',', encoding='utf-8',index=False)
+Prisons_data_points.to_csv("data/prisons_psql.csv", sep=',', encoding='utf-8',index=False)
+Corrections_data_points.to_csv("data/corrections_psql.csv", sep=',', encoding='utf-8',index=False)
+Snap_data_points.to_csv("data/snap_psql.csv", sep=',', encoding='utf-8',index=False)
 
 #To do load these datasets into postgresql database
