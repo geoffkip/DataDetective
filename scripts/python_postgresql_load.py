@@ -60,10 +60,15 @@ Prisons_datasets= without_keys(PA_prisons, {"data", "measures"})
 
 #parse json files to create data points datasets for loading into postgresql    
 Jobs_data_points= parse_json(PA_jobs)
+Jobs_data_points["data_set_id"] = 1
 #PA_trainings= without_keys(PA_trainings,exclude)
 Medicaid_data_points= parse_json(PA_medicaid)
+Medicaid_data_points["data_set_id"] = 2
 Prisons_data_points= parse_json(PA_prisons)
+Prisons_data_points["data_set_id"] = 3
 Corrections_data_points= parse_json(PA_corrections)
+Corrections_data_points["data_set_id"] = 4
 Snap_data_points= parse_json(PA_snap)
+Snap_data_points["data_set_id"] = 5
 
 #To do load these datasets into postgresql database
