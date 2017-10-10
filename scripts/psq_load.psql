@@ -1,0 +1,7 @@
+CREATE TABLE data_points(
+    id SERIAL,
+    data_set_id integer,
+    county text,
+    date datetime,
+    measures json
+);
