@@ -8,4 +8,4 @@ CREATE TABLE data_points(
 );
 -- Import csv to insert data points values into tables
 COPY data_points(county,date,measures,data_set_id)
-FROM 'data\jobs_psql.csv' DELIMITER ',' CSV HEADER;
+FROM '/Users/geoffrey.kip/DataDetective/data/jobs_psql.csv' DELIMITER ',' CSV HEADER;
