@@ -98,6 +98,10 @@ res = es.search(index="paindex", body=body)
 print("%d documents found" % res['hits']['total'])
 print(res)
 
+#testing out query
+res = es.search(index="paindex", body={"query": {"fuzzy": {"categories": {"value" : "health"}}}})
+
+
 
             
 results=[]
