@@ -40,3 +40,28 @@ service elasticsearch status
 To be updated
 
 Suggested [these instructions](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps) to set up Flask on Ubuntu.
+
+## Set up cURL on Ubuntu
+
+
+To install cURL by using the apt-get install command, perform the following steps:
+
+1.Enter the following command to download the package lists from the repositories and update them:
+```
+sudo apt-get update
+```
+2.Enter the following command to install cURL:
+```
+sudo apt-get install curl
+```
+3.To verify that cURL is running correctly, enter this command:
+```
+curl --version
+```
+A message that is similar to the following is displayed:
+
+```
+curl 7.29.0 (x86_64-redhat-linux-gnu) libcurl/7.29.0 NSS/3.15.4 zlib/1.2.7 libidn/1.28 libssh2/1.4.3
+Protocols: dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtsp scp sftp smtp smtps telnet tftp
+Features: AsynchDNS GSS-Negotiate IDN IPv6 Largefile NTLM NTLM_WB SSL libz
+```
