@@ -97,4 +97,5 @@ else:
     .
     .
 ```    
-
+## Python Flask jQuery AJAX POST
+[Link to resource](http://codehandbook.org/python-flask-jquery-ajax-post/)
