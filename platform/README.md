@@ -41,7 +41,7 @@ To be updated
 
 Suggested [these instructions](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps) to set up Flask on Ubuntu.
 
-## Set up cURL on Ubuntu
+## Install cURL on Ubuntu
 
 
 To install cURL by using the apt-get install command, perform the following steps:
@@ -65,3 +65,36 @@ curl 7.29.0 (x86_64-redhat-linux-gnu) libcurl/7.29.0 NSS/3.15.4 zlib/1.2.7 libid
 Protocols: dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtsp scp sftp smtp smtps telnet tftp
 Features: AsynchDNS GSS-Negotiate IDN IPv6 Largefile NTLM NTLM_WB SSL libz
 ```
+
+## Flask Example for handling Requests
+
+```
+@app.route('/users/<user_id>', methods = ['GET', 'POST', 'DELETE'])
+def user(user_id):
+    if request.method == 'GET':
+        """return the information for <user_id>"""
+        .
+        .
+        .
+    if request.method == 'POST':
+        """modify/update the information for <user_id>"""
+        # you can use <user_id>, which is a str but could
+        # changed to be int or whatever you want, along
+        # with your lxml knowledge to make the required
+        # changes
+        data = request.form # a multidict containing POST data
+        .
+        .
+        .
+    if request.method == 'DELETE':
+        """delete user with ID <user_id>"""
+        .
+        .
+        .
+else:
+    # POST Error 405 Method Not Allowed
+    .
+    .
+    .
+```    
+
