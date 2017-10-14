@@ -8,7 +8,7 @@ def connection():
     """
     Establishes a connection to the ElasticSearch server
     """
-    return Elasticsearch('http://elastic:changeme@localhost:9200')
+    return Elasticsearch('http://elastic:changeme@35.190.137.232:9200')
 
 def get_measures(tags, categories):
     """
@@ -20,7 +20,16 @@ def get_measures(tags, categories):
     for category in categories:
         shouldList.append({"fuzzy": {"tags": {"value" : category}}})
     res = connection().search(index="paindex", body={"query":{"bool": {"should": shouldList }}})
-
-    # TODO: Parse measures from res
-
+    measures = parse_measures(res)
+    return measures
+def parse_measures(response):
+    """
+    Returns a list of measures for json response from elasticsearch
+    """
+    responsedatasets = response['hits']['hits']
+    measures = []
+    for responsedataset in responsedatasets:
+        datasetmeasures = responsedataset['_source']['measures']
+        for datasetmeasure in datasetmeasures:
+            measures.append(datasetmeasure)
     return measures

@@ -22,36 +22,37 @@ def columntypes(dataset):
         print (col,dataset[col].dtypes)
 
 # make sure ES is up and running
-res = requests.get('http://localhost:9200')
+res = requests.get('http://35.190.137.232:9200')
 print(res.content)
-es = Elasticsearch('http://elastic:changeme@localhost:9200')
+es = Elasticsearch('http://elastic:changeme@35.190.137.232:9200')
 s = Search(using=es)
 
 #load real data
 # TODO: if index exists check required
 es.indices.delete(index='paindex')
 
-# NOTE: Run this program from the project root
+#NOTE: Run this program from the project root
 with open("data/jobs.json") as jobs_data:
     data = json.load(jobs_data)
     PA_jobs = {'external_id': data["id"],'tags': data["tags"],'categories':data["categories"]}
     print(PA_jobs)
 
-with open("data/trainings.json") as trainings_data:
-    data = json.load(trainings_data) 
-    PA_trainings = {
-		'external_id': data["id"],
-		'tags': data["tags"],
-		'categories':data["categories"]
-	}
-    print(PA_trainings)
+# with open("data/trainings.json") as trainings_data:
+#     data = json.load(trainings_data)
+#     PA_trainings = {
+# 		'external_id': data["id"],
+# 		'tags': data["tags"],
+# 		'categories':data["categories"],
+# 	}
+#     print(PA_trainings)
 
 with open("data/medicaid.json") as medicaid_data:
     data = json.load(medicaid_data)
     PA_medicaid = {
 		'external_id': data["id"],
 		'tags': data["tags"],
-		'categories':data["categories"]
+		'categories':data["categories"],
+        'measures':data["measures"]
 	}
     print(PA_medicaid)
 
@@ -60,15 +61,16 @@ with open("data/prisons.json") as prisons_data:
     PA_prisons = {
 		'external_id': data["id"],
 		'tags': data["tags"],
-		'categories':data["categories"]
+		'categories':data["categories"],
+        'measures':data["measures"]
 	}
     print(PA_prisons)
 
 res= es.index(index="paindex", doc_type='PA', body=PA_jobs)
 print(res['created'])
 
-res= es.index(index="paindex", doc_type='PA', body=PA_trainings)
-print(res['created'])
+# res= es.index(index="paindex", doc_type='PA', body=PA_trainings)
+# print(res['created'])
 
 res= es.index(index="paindex", doc_type='PA', body=PA_medicaid)
 print(res['created'])
@@ -103,15 +105,15 @@ res = es.search(index="paindex", body={"query": {"fuzzy": {"categories": {"value
 
 
 
-            
+
 results=[]
 for i in range(res['hits']['total']):
     feed=res["hits"]["hits"][i]["_source"]["categories"]
     results.append(feed)
-    
-    
-    
-    
+
+
+
+
 
 #example how to access measures from loaded data in elasticsearch database
 # NOTE: You can't always assume that they will come out in order like this.
