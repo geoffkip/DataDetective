@@ -69,7 +69,7 @@ def load(records):
         'name': 'All Jobs January 2015 To October 2016 Community and Economic Development',
         'categories': ['economy','social services'],
         'tags': ['community','dced','jobs','job','economic'],
-        'measures': ['jobs_pledged_to_be_created', 'jobs_pledged_to_be_retained'],
+        'measures': ['jobs_pledged_to_be_created', 'jobs_pledged_to_be_retained','total_jobs'],
         'data': records
     }
 
