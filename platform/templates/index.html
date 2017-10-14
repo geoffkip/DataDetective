@@ -5,25 +5,62 @@
 <br>
 
 <div class="row" id="">
-  <div class="col-md-5">
+  <div class="col-md-4">
     <div class="form-group">
       <label for="measures">Measures</label>
       <select width="50%" class="form-control" id="measures-select" name="state" multiple="multiple">
-        <option value="SNAP Individuals">SNAP Individuals</option>
-        <option value="SNAP Dollars">SNAP Dollars</option>
-        <option value="Jobs Created">Jobs Created</option>
-        <option value="SNAP Individuals">SNAP Individuals</option>
-        <option value="SNAP Dollars">SNAP Dollars</option>
-        <option value="Jobs Created">Jobs Created</option>
+        <option value="snap_individuals">SNAP Individuals</option>
+        <option value="snap_dollars">SNAP Dollars</option>
+        <option value="jobs_created">Jobs Created</option>
+        <option value="medicaid_enrollees">Medicaid Enrollees</option>
+        <option value="corrections_population">Corrections Population</option>
       </select>
     </div>
   </div>
-  <div class="col-md-2">
-  </div>
-  <div class="col-md-5">
+
+  <div class="col-md-4">
     <label for="recommended-measures">Recommendedations</label>
     <br>
-    <span class="badge badge-primary">SNAP Individuals</span>&nbsp;<span class="badge badge-primary">SNAP Dollars</span>&nbsp;<span class="badge badge-primary">Medicaid Population</span>
+    <div id="recommendations">
+      <span class="badge badge-primary">SNAP Individuals</span>&nbsp;
+      <span class="badge badge-primary">SNAP Dollars</span>&nbsp;
+      <span class="badge badge-primary">Medicaid Population</span>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="year">Year</label>
+          <select width="50%" class="form-control" id="years-select" name="year">
+            <option value="2017">2017</option>
+            <option value="2016">2016</option>
+            <option value="2015">2015</option>
+            <option value="2014">2014</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="month">Month</label>
+          <select width="50%" class="form-control" id="months-select" name="month">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+        </div>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -42,76 +79,186 @@
 
 <script>
 var charts = {}; // A list of charts on the page
-/*
-SAMPLE OF charts DATA STRUCTURE:
-{
-  "snap_individuals": {
-    chart: chartObject,
-    data: {
-      "2017": {
-        "01": [...],
-        "02": [...],
-        ...
-        "12": [...]
-      },
-      "2016": {
-        "01": [...],
-        "02": [...],
-        ...
-        "12": [...]
-      }
-    }
-  },
-  "snap_dollars": {
-    chart: chartObject,
-    data {
-      "2017": 4000000,
-      "2016": 4000000
-    }
-  }
-}
 
-
-*/
+var counties = [
+  "Adams",
+  "Armstrong",
+  "Beaver",
+  "Bedford",
+  "Statewide",
+  "Alleghany",
+  "Northampton",
+  "Luzerne",
+  "Lancaster",
+  "Philadelphia",
+  "Washington",
+  "Bradford",
+  "Dauphin",
+  "Snyder",
+  "Deleware",
+  "Bucks",
+  "Montgomery",
+  "Lackawanna",
+  "Schuylkill",
+  "Mifflin",
+  "Franklin",
+  "Union",
+  "York",
+  "Lycoming",
+  "Centre",
+  "Blair",
+  "Fayette",
+  "Mercer",
+  "Pike",
+  "Chester",
+  "Monroe",
+  "Carbon",
+  "Indiana",
+  "Huntingdon",
+  "Greene",
+  "Forest",
+  "Wayne",
+  "Clearfield",
+  "Somerset",
+  "Crawford",
+  "Norhumberland",
+  "Berks",
+  "Tioga",
+  "Columbia",
+  "Butler",
+  "Susquehanna",
+  "Cameron",
+  "Warren",
+  "Venango",
+  "Lebanon",
+  "Lawrence",
+  "Cambria",
+  "Montour",
+  "Juniata",
+  "Jefferson",
+  "Clinton",
+  "McKean",
+  "Statewide Project",
+  "Potter"
+]
 
 $(document).ready(function() {
-  // SETUP MEASURE SELECTION
+  // SETUP SELECTIONS
+  $('#months-select').select2();
+  $('#years-select').select2();
   $('#measures-select').select2();
   $("#measures-select")
     .on('change', function (e) {
-      var data = $('#measures-select').select2('data');
-      var chartsCount = data.length;
-      // Step 1: Fetch all the data for this measure
+      var measures = $('#measures-select').select2('data');
+      var year = $('#years-select').select2('data')[0].id;
+      var month = $('#months-select').select2('data')[0].id;
+      var chartsCount = measures.length;
 
-      // Step 2: Build the time-series of data
 
-      // Step 3: Create the charts
+      // Step 1: Update the Charts
       $("#geo-charts").empty();
       charts = {};
       layout = [12,6,4,6,4,4]
       minHeights = [500, 400, 300, 300, 300, 300]
 
       for(var i = 0; i < chartsCount; i++) {
-
-        // TODO: Dynamically size the charts, dynamically resize the charts
-
-
-        $("#geo-charts").append('<div id="chart'+(i+1)+'" class="col-md-'+layout[chartsCount-1]+'" style="min-height: '+minHeights[chartsCount-1]+'px; margin: 0 auto"></div>');
-        var id = "chart"+ (i+1);
-        var title = data[i].text;
-        var chart = newGeoChart(id, title);
-        charts[title.replace(' ', '_').toLowerCase()] = {
-          chart: chart,
-          data: {} // TODO populate with chart's data
-        };
-
+        $("#geo-charts").append('<div id="chart'+(i+1)+'" class="col-md-'
+                                 + layout[chartsCount-1]+'" style="min-height: '
+                                 + minHeights[chartsCount-1]+'px; margin: 0 auto"></div>');
+        let id = "chart"+ (i+1)
+        let measure = measures[i].id
+        let title = measures[i].text
+        getSeries(measure, year, month, function(series){
+          let chart = newBarChart(id, title, series)
+          charts[measure] = chart
+        });
       }
 
-      console.log(charts)
+      // Step 2: Update the recommendations
+      measures = measures.map(function(m){return m.id})
+      getRecommendations(measures, function(recommendations){
+        $("#recommendations").empty();
+        for(var i = 0; i < recommendations.length; i++) {
+          $("#recommendations").append('<span class="badge badge-primary">'+recommendations[i]+'</span>&nbsp;')
+        }
+      })
 
     })
-
 });
+
+var getSeries = function(measure, year, month, callback) {
+  console.log("In getSeries", measure, year, month)
+  $.ajax({
+      url: '/measures/'+measure,
+      data: {
+        year: year,
+        month: month
+      },
+      type: 'POST',
+      success: function(response) {
+          return callback(response)
+      },
+      error: function(error) {
+          console.log(error);
+      }
+  });
+}
+
+var getRecommendations = function(measures, callback) {
+  console.log("In getSeries", measures)
+  $.ajax({
+      url: '/measures/recommend',
+      data: {
+        measures: measures
+      },
+      type: 'POST',
+      success: function(response) {
+          return callback(response)
+      },
+      error: function(error) {
+          console.log(error);
+      }
+  });
+}
+
+var newBarChart = function(id, title, series) {
+  console.log("Make barchart", id, title, series)
+
+  var barChart = Highcharts.chart(id, {
+      chart: {
+          type: 'column'
+      },
+      title: {
+          text: title
+      },
+      xAxis: {
+          categories: counties,
+          crosshair: true
+      },
+      yAxis: {
+          min: 0,
+          title: {
+              text: 'Rainfall (mm)'
+          }
+      },
+      tooltip: {
+          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+              '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+          footerFormat: '</table>',
+          shared: true,
+          useHTML: true
+      },
+      plotOptions: {
+          column: {
+              pointPadding: 0.2,
+              borderWidth: 0
+          }
+      },
+      series: [series]
+  });
+}
+
 
 // Create the chart
 var newGeoChart = function(id, title) {

@@ -1,70 +1,76 @@
+import sys, os, os.path, binascii
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)),"lib"))
 from flask import Flask, render_template, request, session, redirect, url_for
-from elasticsearch import Elasticsearch
-from elasticsearch_dsl import *
 from flask import jsonify
+import config
 import pandas as pd
 
 app = Flask(__name__)
-
-#Initialize elasticsearch with flask app
-es = Elasticsearch('http://elastic:changeme@localhost:9200')
-res = es.search(index="paindex", body={"query": {"match_all": {}}})
-
-
-COUNTIES_LIST =[{"name": "Adams"},{"name": "Armstrong"},{"name": "Beaver"},
-{"name": "Bedford"},{"name": "Statewide"},{"name": "Alleghany"},
-{"name": "Northampton"},{"name": "Luzerne"},{"name": "Lancaster"},
-{"name": "Philadelphia"},{"name": "Washington"},{"name": "Bradford"},
-{"name": "Dauphin"},{"name": "Snyder"},{"name": "Deleware"},
-{"name": "Bucks"},{"name": "Montgomery"},{"name": "Lackawanna"},
-{"name": "Schuylkill"}, {"name": "Mifflin"},{"name": "Franklin"},
-{"name": "Union"},{"name": "York"},{"name": "Lycoming"},
-{"name": "Centre"},{"name": "Blair"},{"name": "Fayette"},
-{"name": "Mercer"},{"name": "Pike"},{"name": "Chester"},
-{"name": "Monroe"},{"name": "Carbon"},{"name": "Indiana"},
-{"name": "Huntingdon"},{"name": "Greene"},{"name": "Forest"},
-{"name": "Wayne"},{"name": "Clearfield"},{"name": "Somerset"},
-{"name": "Crawford"},{"name": "Norhumberland"},{"name": "Berks"},
-{"name": "Tioga"},{"name": "Columbia"},{"name": "Butler"},{"name": "Susquehanna"},
-{"name": "Cameron"},{"name": "Warren"},{"name": "Venango"},
-{"name": "Lebanon"},{"name": "Lawrence"},{"name": "Cambria"},
-{"name": "Montour"},{"name": "Juniata"},{"name": "Jefferson"},
-{"name": "Clinton"},{"name": "McKean"},{"name": "Statewide Project"},
-{"name": "Potter"}]
-
-MEASURES_LIST= [{"name": "corrections_population"}, {"name": "jobs_pledged_to_be_created"},
-{"name": "jobs_pledged_to_be_retained"},{"name": "corrections_population"},
-{"name": "ma_individuals"},{"name": "ma_children"}, {"name": "total_jobs"}]
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
+@app.route('/measures/<measure>', methods=['POST'])
+def measure_data(measure):
+    """
+    Returns the data for a given measure, year, and month as JSON that
+    can be used as a series in a HighChart:
+
+    {
+      "data": [
+        ['County 1', 100],
+        ['County 2', 100],
+        ...
+        ['County n', 100]
+      ],
+      "name": 'Measure Name (date_1)'
+    }
+    """
+    year =  request.form['year']
+    month = request.form['month']
+
+    # TODO: Fetch the data for this measure from the database.
+    # data = get_measure_data(measure, year, month)
+
+    return jsonify(config.SERIES),200
+
+@app.route('/measures/recommend', methods=['POST'])
+def recommend():
+    """
+    Returns a list of measure similar to the list of measures.
+    """
+    # measures =  request.get_json()["measures"]
+
+    # TODO: Get the list of tags and catagories for this measure
+    # tags, categories = database.get_tags_categories(measures)
+
+    # TODO: Get the list of similar measures
+    # measures = recommender.get_measures(tags, categories)
+    # i.e. ['snap_dollars', 'snap_individuals', 'jobs_created']
+
+    # NOTE: Mocking this for now so I can connect the it to the frontend
+    return jsonify(['snap_dollars', 'snap_individuals', 'jobs_created']),200
+
+
 @app.route('/counties/list')
 def counties():
-    return jsonify(COUNTIES_LIST),200
+    """
+    Returns a list of all counties in PA.
+    """
+    return jsonify(config.COUNTIES),200
 
 @app.route('/measures/list')
 def measures():
-    return jsonify(MEASURES_LIST),200
-	
-@app.route('/measures/recommend', methods=['GET'])
-def recommender():
-   tags = request.args.get('tags').split(',')
-   categories = request.args.get('categories').split(',')
-   shouldList = []
-   for tag in tags:
-       shouldList.append({"fuzzy": {"tags": {"value" : tag}}})
-   for category in categories:
-       shouldList.append({"fuzzy": {"tags": {"value" : category}}})
-   res = es.search(index="paindex", body={"query":{"bool": {"should": shouldList }}})
-#   res = es.search(index="paindex", body={"query": {"fuzzy": {"tags": {"value" : ["community","economy"]}}}})
-   return jsonify(res),200
-	
+    """
+    Returns the list of all measures stored in the database.
+    """
 
-@app.route('/chart/line')
-def chart():
-    return jsonify(MEASURES_LIST),200
+    # TODO: Get this returning a list of all measures
+    #       Probably best to initialize the list of measures
+    #       once when the application is first initialized.
+
+    return jsonify(config.MEASURES),200
 
 
 if __name__ == '__main__':
