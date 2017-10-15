@@ -40,17 +40,10 @@ def recommend():
     """
     Returns a list of measure similar to the list of measures.
     """
-    # measures =  request.get_json()["measures"]
-
-    # TODO: Get the list of tags and catagories for this measure
-    # tags, categories = database.get_tags_categories(measures)
-
-    # TODO: Get the list of similar measures
-    # measures = recommender.get_measures(tags, categories)
-    # i.e. ['snap_dollars', 'snap_individuals', 'jobs_created']
-
-    # NOTE: Mocking this for now so I can connect the it to the frontend
-    return jsonify(['snap_dollars', 'snap_individuals', 'jobs_created']),200
+    measures =  request.get_json()["measures"]
+    tags, categories = recommender.get_tags_categories(measures)
+    measures = recommender.get_measures(tags, categories)
+    return jsonify(measures),200
 
 
 @app.route('/counties/list')

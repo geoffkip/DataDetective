@@ -1,14 +1,30 @@
 """
 Wrapper for PostgreSQL
+
+Requires environmental variables be set:
+    - DB_HOST
+    - DB_USER
+    - DB_PASSWORD
+    - DB_NAME
+
 """
+from sqlalchemy import create_engine
+import psycopg2
+import os
+
 
 def cursor():
     """
     Returns a connection/cursor to the database
     """
-    # TODO:
+    con = psycopg2.connect(host=os.environ['DB_HOST'],
+                           user=os.environ['DB_USER'],
+                           password=os.environ['DB_PASSWORD'],
+                           database=os.environ['DB_NAME'])
 
-    return cursor
+    return con.cursor()
+
+def engine():
 
 def query(sql):
     """
@@ -24,12 +40,4 @@ def get_measure_data(measure, year, month):
     """
     # TODO:
 
-    return tags, categories
-
-def get_tags_categories(measures):
-    """
-    Returns a list of tags and categories associate with measures
-    """
-    # TODO:
-
-    return tags, categories
+    return data

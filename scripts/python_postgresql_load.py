@@ -13,7 +13,7 @@ from sqlalchemy import create_engine
 import psycopg2
 
 con = psycopg2.connect( host= hostname, user= username, password= password, database=database)
-cur = con.cursor()  
+cur = con.cursor()
 engine = create_engine('postgresql://postgres:titans@35.196.134.129:5432/postgres')
 
 cur.execute("DROP TABLE IF EXISTS data_points")
@@ -53,16 +53,15 @@ with open("data/medicaid.json") as medicaid_data:
 with open("data/prisons.json") as prisons_data:
     PA_prisons = json.load(prisons_data)
     print(PA_prisons)
-    
+
 with open("data/corrections_pop.json") as corrections_data:
     PA_corrections = json.load(corrections_data)
     print(PA_corrections)
-    
+
 with open("data/snap.json") as snap_data:
     PA_snap = json.load(snap_data)
     print(PA_snap)
-    
-    
+
 #Create datasets for loading into postgressql
 Jobs_datasets= without_keys(PA_jobs,{"data"})
 Jobs_datasets["data_set_id"] = 1
@@ -77,7 +76,7 @@ Snap_datasets["data_set_id"]=4
 Prisons_datasets= without_keys(PA_prisons, {"data", "measures"})
 Prisons_datasets["data_set_id"]= 5
 
-#parse json files to create data points datasets for loading into postgresql    
+#parse json files to create data points datasets for loading into postgresql
 Jobs_data_points= parse_json(PA_jobs)
 Jobs_data_points["data_set_id"] = 1
 #PA_trainings= without_keys(PA_trainings,exclude)
@@ -89,19 +88,19 @@ Corrections_data_points= parse_json(PA_corrections)
 Corrections_data_points["data_set_id"] = 4
 Snap_data_points= parse_json(PA_snap)
 Snap_data_points["data_set_id"] = 5
-     
-#load these datasets into postgresql database   
-             
+
+#load these datasets into postgresql database
+
 Jobs_data_points.to_sql("data_points", engine, if_exists='replace')
 Medicaid_data_points.to_sql("data_points", engine, if_exists='replace')
 Prisons_data_points.to_sql("data_points", engine, if_exists='replace')
 Corrections_data_points.to_sql("data_points", engine, if_exists='replace')
 Snap_data_points.to_sql("data_points", engine, if_exists='replace')
 
-      
- #Export as csvs
-Jobs_data_points.to_csv("data/jobs_psql.csv", sep=',', encoding='utf-8',index=False)               
-Medicaid_data_points.to_csv("data/medicaid_psql.csv", sep=',', encoding='utf-8',index=False)
-Prisons_data_points.to_csv("data/prisons_psql.csv", sep=',', encoding='utf-8',index=False)
-Corrections_data_points.to_csv("data/corrections_psql.csv", sep=',', encoding='utf-8',index=False)
-Snap_data_points.to_csv("data/snap_psql.csv", sep=',', encoding='utf-8',index=False)
+# # NOTE: The data directory does not belong to the database, don't write to it...
+# #Export as csvs
+# Jobs_data_points.to_csv("data/jobs_psql.csv", sep=',', encoding='utf-8',index=False)
+# Medicaid_data_points.to_csv("data/medicaid_psql.csv", sep=',', encoding='utf-8',index=False)
+# Prisons_data_points.to_csv("data/prisons_psql.csv", sep=',', encoding='utf-8',index=False)
+# Corrections_data_points.to_csv("data/corrections_psql.csv", sep=',', encoding='utf-8',index=False)
+# Snap_data_points.to_csv("data/snap_psql.csv", sep=',', encoding='utf-8',index=False)
