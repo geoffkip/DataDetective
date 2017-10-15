@@ -15,7 +15,7 @@ Sample:
 }
 """
 
-DATA_FILE_PATH = 'park_n_ride.json'
+DATA_FILE_PATH = 'data/park_n_ride.json'
 
 CODE_COUNTY = {
     '1' :'Adams','2' :'Allegheny','3' :'Armstrong','4' :'Beaver','5' :'Bedford','6' :'Berks',
@@ -83,24 +83,15 @@ def transform(data):
         }
         county_data_set.append(county_datum)
 
-
-    pprint(county_data_set)
-
     correction_dataframe = pd.DataFrame.from_dict(county_data_set)
 
-
-    print(correction_dataframe.head(10))
-    print(correction_dataframe.columns)
     agg_function_sum = {'parking_space_count': ['sum'],'handicap_space_count': ['sum'],'park_and_ride_count': ['sum']}
     correction_dataframe = correction_dataframe.groupby(["county"]).agg(agg_function_sum)
 
-
-    pprint(correction_dataframe)
     correction_dataframe.reset_index(inplace=True)
-    print(correction_dataframe.columns)
     correction_dataframe.columns = pd.Index(['county','park_and_ride_count','handicap_space_count','parking_space_count'])
-    pprint(correction_dataframe)
-    return correction_dataframe
+
+    return correction_dataframe.T.to_dict().values()
 
 def load(records):
     """
@@ -111,7 +102,8 @@ def load(records):
         'name': 'Park and Ride Locations Current Transportation',
         'categories': ['transportation','recreation','environment'],
         'tags': ['location','pdot','ride,park'],
-        'data': records.T.to_dict().values()
+        'measures': ['park_and_ride_count','handicap_space_count','parking_space_count'],
+        'data': records
     }
 
     with open(DATA_FILE_PATH, 'w') as data_file:

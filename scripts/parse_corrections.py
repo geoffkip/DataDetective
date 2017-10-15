@@ -14,7 +14,7 @@ Sample:
 }
 """
 
-DATA_FILE_PATH = 'data/corrections_pop.json'
+DATA_FILE_PATH = 'data/corrections.json'
 
 def extract():
     """
@@ -59,22 +59,16 @@ def transform(data):
     correction_dataframe = pd.DataFrame.from_dict(county_data_set)
     # Group by month, take the max for each institution
     # Group by county, sum them
-    print(correction_dataframe.head(10))
     agg_function_max = {'corrections_population': ['max']}
     correction_dataframe = correction_dataframe.groupby(["county", "institution", "month"]).agg(agg_function_max)
     correction_dataframe.reset_index(inplace=True)
     correction_dataframe.columns = pd.Index(['county','institution','month','corrections_population'])
-    print(correction_dataframe.head(10))
-    print(correction_dataframe.columns)
     agg_function_sum = {'corrections_population': ['sum']}
     correction_dataframe = correction_dataframe.groupby(["county", "month"]).agg(agg_function_sum)
 
-    pprint(correction_dataframe)
     correction_dataframe.reset_index(inplace=True)
-    print(correction_dataframe.columns)
     correction_dataframe.columns = pd.Index(['county','date','corrections_population'])
-    pprint(correction_dataframe)
-    return correction_dataframe
+    return correction_dataframe.T.to_dict().values()
 
 def load(records):
     """
@@ -86,7 +80,7 @@ def load(records):
         'categories': ['demographics','public safety','education'],
         'tags': ['population','re-entry','public safety','corrections','doc'],
         'measures': ['corrections_population'],
-        'data': records.T.to_dict().values()
+        'data': records
     }
 
     with open(DATA_FILE_PATH, 'w') as data_file:

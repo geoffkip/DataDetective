@@ -19,7 +19,7 @@ def extract():
     """
     Extracts data from a URL. Returns the data extracted as a pandas DataFrame.
     """
-    f = open('data/poverty.csv', 'r')
+    f = open('data/eddi/poverty.csv', 'r')
     reader = csv.DictReader(f,delimiter='\t')
     extracted_data = [row for row in reader]
 
@@ -68,8 +68,9 @@ def load(records):
     document = {
         'id': 'aps5-fttf',
         'name': 'Enterprise Data Dissemination Informatics Exchange Department of Health: Hospitalizations by County 2001-2014',
-        'categories': ['social services,finance,health'],
-        'tags': ['statistics', 'health', 'informatics', 'exchange', 'child', 'cancer', 'birth', 'air', 'disease', 'hospital', 'housing', 'pregnancies'],
+        'categories': ['social services','finance','health'],
+        'tags': ['statistics', 'health', 'informatics', 'exchange', 'child'],
+        'measures': ['percent_children_in_poverty','children_in_poverty'],
         'data': records
     }
 
