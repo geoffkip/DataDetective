@@ -1,5 +1,7 @@
+import random
+import datetime,time
 
-COUNTIES_LIST = [
+COUNTIES = [
 "Adams",
 "Armstrong",
 "Beaver",
@@ -57,10 +59,8 @@ COUNTIES_LIST = [
 "Jefferson",
 "Clinton",
 "McKean",
-"Statewide Project",
 "Potter"
 ]
-
 MEASURES_LIST= [
     {"name": "corrections_population"},
     {"name": "jobs_pledged_to_be_created"},
@@ -71,12 +71,27 @@ MEASURES_LIST= [
     {"name": "total_jobs"}
 ]
 
-SERIES = {
-  "data": [
-    ['Philadelphia', 120],
-    ['Centre', 150],
-    ['Potter', 125],
-    ['Bucks', 155]
-  ],
-  "name": 'Measure Name'
-}
+def generate_series(measure):
+    random.seed(abs(hash(measure)))
+    return {
+        "data": list(map((lambda c: [c,random.randint(0,100)]), COUNTIES)),
+        "name": measure
+    }
+
+def generate_timeseries(measure):
+    random.seed(abs(hash(measure)))
+    return {
+        "name": measure,
+        "data": [[time.mktime(datetime.datetime(2017,1,1).utctimetuple())*1000,random.randint(0,100)],
+        [time.mktime(datetime.datetime(2017,2,1).utctimetuple())*1000,random.randint(0,100)],
+        [time.mktime(datetime.datetime(2017,3,1).utctimetuple())*1000,random.randint(0,100)],
+        [time.mktime(datetime.datetime(2017,4,1).utctimetuple())*1000,random.randint(0,100)],
+        [time.mktime(datetime.datetime(2017,5,1).utctimetuple())*1000,random.randint(0,100)],
+        [time.mktime(datetime.datetime(2017,6,1).utctimetuple())*1000,random.randint(0,100)],
+        [time.mktime(datetime.datetime(2017,7,1).utctimetuple())*1000,random.randint(0,100)],
+        [time.mktime(datetime.datetime(2017,8,1).utctimetuple())*1000,random.randint(0,100)],
+        [time.mktime(datetime.datetime(2017,9,1).utctimetuple())*1000,random.randint(0,100)],
+        [time.mktime(datetime.datetime(2017,10,1).utctimetuple())*1000,random.randint(0,100)],
+        [time.mktime(datetime.datetime(2017,11,1).utctimetuple())*1000,random.randint(0,100)],
+        [time.mktime(datetime.datetime(2017,12,1).utctimetuple())*1000,random.randint(0,100)]]
+    }

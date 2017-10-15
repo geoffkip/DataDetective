@@ -9,7 +9,19 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', page="home")
+
+@app.route('/tools/maps')
+def tools_maps():
+    return render_template('tools/maps.html', page="maps")
+
+@app.route('/tools/lines')
+def tools_lines():
+    return render_template('tools/lines.html', page="lines")
+
+@app.route('/tools/columns')
+def tools_columns():
+    return render_template('tools/columns.html', page="columns")
 
 @app.route('/measures/<measure>', methods=['POST'])
 def measure_data(measure):
@@ -33,17 +45,26 @@ def measure_data(measure):
     # TODO: Fetch the data for this measure from the database.
     # data = get_measure_data(measure, year, month)
 
-    return jsonify(config.SERIES),200
+    return jsonify(config.generate_series(measure)),200
+
+@app.route('/measures/<measure>/timeseries', methods=['POST'])
+def measure_data_timeseries(measure):
+    """
+    Returns the data for a given measure for timeseries HighChart
+    """
+
+    return jsonify(config.generate_timeseries(measure)),200
+
 
 @app.route('/measures/recommend', methods=['POST'])
 def recommend():
     """
     Returns a list of measure similar to the list of measures.
     """
-    measures =  request.get_json()["measures"]
-    tags, categories = recommender.get_tags_categories(measures)
-    measures = recommender.get_measures(tags, categories)
-    return jsonify(measures),200
+    #measures =  request.get_json()["measures"]
+    #tags, categories = recommender.get_tags_categories(measures)
+    #measures = recommender.get_measures(tags, categories)
+    return jsonify(['snap_dollars','snap_individuals']),200
 
 
 @app.route('/counties/list')
@@ -65,6 +86,9 @@ def measures():
 
     return jsonify(config.MEASURES),200
 
+@app.route('/js/<path:path>')
+def send_js(path):
+    return send_from_directory('static', path)
 
 if __name__ == '__main__':
     app.run(debug=True)
