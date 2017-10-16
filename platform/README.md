@@ -1,7 +1,7 @@
 # DataDetective: Platform
 
-## Setting up Google cloud virtual machine(vm)
-To be updated
+## Setting up Google cloud virtual machine(VM)
+A virtual machine was set up using Google's compute engine. An instance with elasticsearch pre-installed was used from Bitnami --> https://console.cloud.google.com/launcher/details/bitnami-launchpad/elasticsearch?project=boreal-quarter-181516. It was provisioned with 2 GB ram.
 
 
 ## Setting up elasticsearch db
