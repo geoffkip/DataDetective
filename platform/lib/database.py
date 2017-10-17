@@ -31,6 +31,8 @@ def query(sql):
     Returns the results of the sql query
     """
     # TODO:
+    cur.execute(query)
+    results= cur.fetchall()
 
     return results
 
