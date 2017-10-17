@@ -24,20 +24,17 @@ def cursor():
 
     return con.cursor()
 
-def engine():
-
 def query(sql):
     """
     Returns the results of the sql query
     """
-    # TODO:
-
-    return results
+    return cursor().execute(sql)
 
 def get_measure_data(measure, year, month):
     """
     Returns the data for a given measure
     """
     # TODO:
-
+    data = query("SELECT .... FROM data_points")
+    ...
     return data
