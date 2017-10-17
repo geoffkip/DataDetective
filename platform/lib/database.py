@@ -42,6 +42,7 @@ def get_measure_data(measure, year, month):
     Returns the data for a given measure
     """
     # TODO:
-    data = query("SELECT %s FROM data_points where year= %s and month= %s" % measure, % year, % month)
+    data = query("SELECT %s FROM data_points where year= %s and month= %s and measure is not null" 
+                 % (measure, year, month))
 
     return data
