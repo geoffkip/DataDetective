@@ -8,7 +8,7 @@ def connection():
     """
     Establishes a connection to the ElasticSearch server
     """
-    return Elasticsearch('http://elastic:changeme@35.190.137.232:9200')
+    return Elasticsearch('http://elastic:changeme@35.185.12.0:9200')
 
 def get_tags_categories(measures):
     """

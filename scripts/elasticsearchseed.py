@@ -14,7 +14,7 @@ import json
 
 
 # TODO: Move this to an environmental variable
-es = Elasticsearch('http://elastic:changeme@35.190.137.232:9200')
+es = Elasticsearch('http://elastic:changeme@35.185.12.0:9200')
 try: # to delete the index if it exists (for idempotentcy)
     es.indices.delete(index='paindex')
 except NotFoundError as e:
