@@ -28,21 +28,20 @@ def query(sql):
     """
     Returns the results of the sql query
     """
-<<<<<<< HEAD
-    return cursor().execute(sql)
-=======
+
     # TODO:
+    cur= cursor()
     cur.execute(sql)
     results= cur.fetchall()
 
     return results
->>>>>>> 29c0949f7b6e95369e8dd76ba8203ee2fa08154e
+
 
 def get_measure_data(measure, year, month):
     """
     Returns the data for a given measure
     """
     # TODO:
-    data = query("SELECT .... FROM data_points")
-    ...
+    data = query("SELECT %s FROM data_points where year= %s and month= %s" % measure, % year, % month)
+
     return data
