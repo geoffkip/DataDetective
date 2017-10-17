@@ -28,7 +28,15 @@ def query(sql):
     """
     Returns the results of the sql query
     """
+<<<<<<< HEAD
     return cursor().execute(sql)
+=======
+    # TODO:
+    cur.execute(sql)
+    results= cur.fetchall()
+
+    return results
+>>>>>>> 29c0949f7b6e95369e8dd76ba8203ee2fa08154e
 
 def get_measure_data(measure, year, month):
     """
