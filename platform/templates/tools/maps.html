@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block body %}
+
+
+<div class="row" id="geo-charts">
+
+</div>
+
+<script>
+var drawCharts = function(measures, year, month) {
+  var chartsCount = measures.length;
+  $("#geo-charts").empty();
+  charts = {};
+  layout = [12,6,4,6,4,4]
+  minHeights = [500, 400, 300, 300, 300, 300]
+
+  for(var i = 0; i < chartsCount; i++) {
+    $("#geo-charts").append('<div id="chart'+(i+1)+'" class="col-md-'
+                             + layout[chartsCount-1]+'" style="min-height: '
+                             + minHeights[chartsCount-1]+'px; margin: 0 auto"></div>');
+    let id = "chart"+ (i+1)
+    let measure = measures[i].id
+    let title = measures[i].text
+    getSeries(measure, year, month, function(series){
+      let chart = newGeoChart(id, title)
+      charts[measure] = chart
+    });
+  }
+}
+</script>
+
+{% endblock %}

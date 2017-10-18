@@ -8,7 +8,9 @@
 
     <title>Data Detective</title>
 
+    <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.0/css/bootstrap-slider.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -22,7 +24,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.9.0/bootstrap-slider.min.js"></script>
     <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/async@2.5.0/dist/async.min.js"></script>
 
   </head>
 
@@ -35,24 +37,120 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
-        <!-- <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <ul class="navbar-nav mr-auto">
+          {% if page == "home" %}
+            <li class="nav-item active">
+          {% else %}
+            <li class="nav-item">
+          {% endif %}
+            <a class="nav-link" href="/"><span style="margin: 0 10px; font-size:20px" class="oi oi-home"></span></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+          {% if page == "columns" %}
+            <li class="nav-item active">
+          {% else %}
+            <li class="nav-item ">
+          {% endif %}
+            <a class="nav-link" href="/tools/columns"><span style="margin: 0 10px; font-size:20px" class="oi oi-bar-chart"></span></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
+          {% if page == "lines" %}
+            <li class="nav-item active">
+          {% else %}
+            <li class="nav-item">
+          {% endif %}
+            <a class="nav-link" href="/tools/lines"><span style="margin: 0 10px; font-size:20px" class="oi oi-graph"></span></a>
           </li>
-        </ul> -->
+          {% if page == "maps" %}
+            <li class="nav-item active">
+          {% else %}
+            <li class="nav-item">
+          {% endif %}
+            <a class="nav-link" href="/tools/maps"><span style="margin: 0 10px; font-size:20px"  class="oi oi-globe"></span></a>
+          </li>
+        </ul>
       </div>
     </nav>
+    <br>
+    <br>
+    <br>
+    <!-- Measures Selection Widget -->
+    <div class="row" style="padding: 0 10px">
+      <!-- <div class="col-md-4">
+        <div class="form-group">
+          <label for="counties">Counties</label>
+          <label id="all-counties" class="checkbox-inline" style="float:right">
+            <input type="checkbox" value="">&nbsp; All Counties</label>
+          </label>
+          <select width="50%" class="form-control" id="counties-select" name="counties" multiple="multiple">
+            <option value="snap_individuals">SNAP Individuals</option>
+            <option value="snap_dollars">SNAP Dollars</option>
+            <option value="jobs_created">Jobs Created</option>
+            <option value="medicaid_enrollees">Medicaid Enrollees</option>
+            <option value="corrections_population">Corrections Population</option>
+          </select>
+        </div>
+      </div> -->
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="measures">Measures</label>
+          <select width="50%" class="form-control" id="measures-select" name="measures" multiple="multiple">
+            <option value="snap_individuals">SNAP Individuals</option>
+            <option value="snap_dollars">SNAP Dollars</option>
+            <option value="jobs_created">Jobs Created</option>
+            <option value="medicaid_enrollees">Medicaid Enrollees</option>
+            <option value="corrections_population">Corrections Population</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label for="recommended-measures">Recommendedations</label>
+        <br>
+        <div id="recommendations">
+          <span class="badge badge-primary">SNAP Individuals</span>&nbsp;
+          <span class="badge badge-primary">SNAP Dollars</span>&nbsp;
+          <span class="badge badge-primary">Medicaid Population</span>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="year">Year</label>
+              <select width="50%" class="form-control" id="years-select" name="year">
+                <option value="2017">2017</option>
+                <option value="2016">2016</option>
+                <option value="2015">2015</option>
+                <option value="2014">2014</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="month">Month</label>
+              <select width="50%" class="form-control" id="months-select" name="month">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Begin page content -->
     <div class="container">
       {% block body %}{% endblock %}
     </div>
 
+    <script src="/static/main.js"></script>
   </body>
 </html>

@@ -20,7 +20,7 @@ def extract():
     """
     Extracts data from a URL. Returns the data extracted as a pandas DataFrame.
     """
-    f = open('data/Hospitalization.csv', 'r')
+    f = open('data/eddi/Hospitalization.csv', 'r')
     reader = csv.DictReader(f)
     extracted_data = [row for row in reader]
 
@@ -69,15 +69,12 @@ def transform(data):
         hospitalizations.append(data_point)
 
     hospitalizations_dataframe = pd.DataFrame.from_dict(hospitalizations)
-    #print(hospitalizations_dataframe.head (10))
 
     agg_function_max = {'total_population_asthma': ['sum'],'count_asthma_hospitalizations': ['sum']}
     hospitalizations_dataframe = hospitalizations_dataframe.groupby(["county","date"]).agg(agg_function_max)
-    #print(hospitalizations_dataframe.head (10))
 
     hospitalizations_dataframe.reset_index(inplace=True)
     hospitalizations_dataframe.columns = pd.Index (['county', 'date', 'total_population_asthma', 'count_asthma_hospitalizations'])
-    print(hospitalizations_dataframe.head(100))
     return hospitalizations_dataframe.T.to_dict().values()
 
 
@@ -88,8 +85,9 @@ def load(records):
     document = {
         'id': 'aps5-fttf',
         'name': 'Enterprise Data Dissemination Informatics Exchange Department of Health: Hospitalizations by County 2001-2014',
-        'categories': ['social services,finance,health'],
-        'tags': ['statistics', 'health', 'informatics', 'exchange', 'child', 'cancer', 'birth', 'air', 'disease', 'hospital', 'housing', 'pregnancies'],
+        'categories': ['social services','finance','health'],
+        'tags': ['statistics', 'health', 'informatics', 'exchange', 'air', 'disease', 'hospital'],
+        'measures': ['total_population_asthma', 'count_asthma_hospitalizations'],
         'data': records
     }
 
@@ -99,7 +97,6 @@ def load(records):
 
     return document
 
-# TODO: wrap this in an execute function
 data = extract()
 data_points = transform(data)
 document = load(data_points)

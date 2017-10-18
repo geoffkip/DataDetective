@@ -1,7 +1,7 @@
 # DataDetective: Platform
 
-## Setting up Google cloud virtual machine(vm)
-To be updated
+## Setting up Google cloud virtual machine(VM)
+A virtual machine was set up using Google's compute engine. An instance with elasticsearch pre-installed was used from Bitnami --> https://console.cloud.google.com/launcher/details/bitnami-launchpad/elasticsearch?project=boreal-quarter-181516. It was provisioned with 2 GB ram.
 
 
 ## Setting up elasticsearch db
@@ -37,7 +37,6 @@ service elasticsearch status
 ```
 
 ## Setting up flask app
-To be updated
 
 Suggested [these instructions](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps) to set up Flask on Ubuntu.
 
@@ -99,3 +98,6 @@ else:
 ```    
 ## Python Flask jQuery AJAX POST
 [Link to resource](http://codehandbook.org/python-flask-jquery-ajax-post/)
+
+## Postgresql Database Setup
+Postgresql 9.6 was used to store the data points that will be used for the front-end of the app. A google cloud SQL instance of Postgresql was provisioned with 10GB of memory. Parsed json files are then loaded into the Database by connecting to it using Python and inserting them into the database using an API in Python to do so.

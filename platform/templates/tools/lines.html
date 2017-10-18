@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block body %}
+
+
+<div class="row" id="line-chart">
+
+</div>
+
+<script>
+var drawCharts = function(measures, year, month) {
+  var seriesCount = measures.length;
+  seriesList = []
+
+  async.each(measures,  function(measure, callback) {
+    let slug = measure.id
+    let title = measure.text
+    getTimeSeries(slug, year, month, function(series){
+      seriesList.push(series)
+      callback();
+    });
+  }, function(err) {
+    let chart = lineChart("line-chart", null, seriesList)
+  })
+
+}
+var lineChart = function(id, title, series) {
+  console.log("Make lines: ", id, title, series)
+
+  var barChart = Highcharts.chart(id, {
+      chart: {
+          type: 'line'
+      },
+      title: {
+          text: title
+      },
+      xAxis: {
+          type: 'datetime',
+          crosshair: true
+      },
+      yAxis: {
+          min: 0,
+          title: {
+              text: 'Rainfall (mm)'
+          }
+      },
+      tooltip: {
+          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+              '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+          footerFormat: '</table>',
+          shared: true,
+          useHTML: true
+      },
+      plotOptions: {
+          column: {
+              pointPadding: 0.2,
+              borderWidth: 0
+          }
+      },
+      series: series
+  });
+}
+</script>
+
+{% endblock %}
