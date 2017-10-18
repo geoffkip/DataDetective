@@ -4,6 +4,11 @@ ElasticSearch Seed:
 
 This script loads all the parse data into ElasticSearch idempotently.
 
+Requires environmental variables be set:
+    - ES_HOST
+    - ES_USER
+    - ES_PASS
+
 """
 from datetime import datetime
 from elasticsearch import Elasticsearch
@@ -14,7 +19,6 @@ import os
 import json
 
 
-# TODO: Move this to an environmental variable
 elasticSearchConnectionString = 'http://' + os.environ['ES_USER']+':' + os.environ['ES_PASS'] + '@' + os.environ['ES_HOST']
 es = Elasticsearch(elasticSearchConnectionString)
 try: # to delete the index if it exists (for idempotentcy)

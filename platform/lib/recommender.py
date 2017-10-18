@@ -1,5 +1,10 @@
 """
 Wrapper for ElasticSearch
+
+Requires environmental variables be set:
+    - ES_HOST
+    - ES_USER
+    - ES_PASS
 """
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import *
