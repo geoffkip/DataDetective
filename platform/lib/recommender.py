@@ -3,12 +3,14 @@ Wrapper for ElasticSearch
 """
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import *
+import os
 
 def connection():
     """
     Establishes a connection to the ElasticSearch server
     """
-    return Elasticsearch('http://elastic:changeme@35.185.12.0:9200')
+    elasticSearchConnectionString = 'http://' + os.environ['ES_USER']+':' + os.environ['ES_PASS'] + '@' + os.environ['ES_HOST']
+    return Elasticsearch(elasticSearchConnectionString)
 
 def get_tags_categories(measures):
     """

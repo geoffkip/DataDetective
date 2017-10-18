@@ -10,11 +10,13 @@ from elasticsearch import Elasticsearch
 from elasticsearch.exceptions import NotFoundError
 from elasticsearch_dsl import *
 from pprint import pprint
+import os
 import json
 
 
 # TODO: Move this to an environmental variable
-es = Elasticsearch('http://elastic:changeme@35.185.12.0:9200')
+elasticSearchConnectionString = 'http://' + os.environ['ES_USER']+':' + os.environ['ES_PASS'] + '@' + os.environ['ES_HOST']
+es = Elasticsearch(elasticSearchConnectionString)
 try: # to delete the index if it exists (for idempotentcy)
     es.indices.delete(index='paindex')
 except NotFoundError as e:
