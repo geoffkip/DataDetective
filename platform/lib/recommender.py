@@ -23,8 +23,8 @@ def get_tags_categories(measures):
     """
     mustList = []
     for measure in measures:
-        mustList.append({"match": {"measures": {"value" : measure}}})
-    res = connection().search(index="paindex", body={"query":{"bool": {"must": mustList }}})
+        mustList.append({"match": {"measures": measure}})
+    res = connection().search(index="paindex", body={"query":{"bool": {"should": mustList }}})
     tags, categories = parse_tags_categories(res)
     return tags, categories
 

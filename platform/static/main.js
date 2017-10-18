@@ -128,7 +128,7 @@ var getRecommendations = function(measures, callback) {
   $.ajax({
       url: '/measures/recommend',
       data: {
-        measures: measures
+        measures: JSON.stringify(measures.join(','))
       },
       type: 'POST',
       success: function(response) {

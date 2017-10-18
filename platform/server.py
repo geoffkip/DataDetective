@@ -3,6 +3,7 @@ sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)),"lib"))
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask import jsonify
 import config
+import recommender
 import pandas as pd
 
 app = Flask(__name__)
@@ -36,7 +37,7 @@ def measure_data(measure):
         ...
         ['County n', 100]
       ],
-      "name": 'Measure Name (date_1)'
+      "name": 'Measure Name'
     }
     """
     year =  request.form['year']
@@ -61,10 +62,14 @@ def recommend():
     """
     Returns a list of measure similar to the list of measures.
     """
-    #measures =  request.get_json()["measures"]
-    #tags, categories = recommender.get_tags_categories(measures)
-    #measures = recommender.get_measures(tags, categories)
-    return jsonify(['snap_dollars','snap_individuals']),200
+    selected_measures =  request.form["measures"].split(',')
+    print(selected_measures)
+    tags, categories = recommender.get_tags_categories(selected_measures)
+    print(tags, categories)
+    recommended_measures = recommender.get_measures(tags, categories)
+    print("measures:", recommended_measures)
+    # TODO: remove selected_measures from recommended_measures
+    return jsonify(recommended_measures),200
 
 
 @app.route('/counties/list')
@@ -79,12 +84,8 @@ def measures():
     """
     Returns the list of all measures stored in the database.
     """
-
-    # TODO: Get this returning a list of all measures
-    #       Probably best to initialize the list of measures
-    #       once when the application is first initialized.
-
-    return jsonify(config.MEASURES),200
+    measures = recommender.get_measures([],[])
+    return jsonify(measures),200
 
 @app.route('/js/<path:path>')
 def send_js(path):
