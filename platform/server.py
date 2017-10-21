@@ -70,7 +70,6 @@ def recommend():
     recommended_measures = recommender.get_measures(tags, categories)
     #print("measures:", recommended_measures)
     unduplicatedMeasures=list(set(recommended_measures))
-    #print unduplicatedMeasures
     return jsonify(unduplicatedMeasures),200
 
 
