@@ -42,22 +42,24 @@ def transform(data):
     for datum in data:
         print(datum)
         county = datum["CountyState"]
-        year = datum["Calendar_Year"]
         children_in_poverty = int(datum["Poverty_LT5"].replace(',',''))
         percent_children_in_poverty = float(datum["Pct_Poverty_LT5"])
 
+        # Create some data for each year in the range
+        years = datum["Calendar_Year"].split('-')
 
-        data_point = {
-            'county': county,
-            'date': year+'-01-01',
-            'children_in_poverty': children_in_poverty,
-            'percent_children_in_poverty': percent_children_in_poverty,
-            }
+        for year in range(int(years[0]), int(years[1])+1):
+            data_point = {
+                'county': county,
+                'date': str(year)+'-01-01',
+                'children_in_poverty': children_in_poverty,
+                'percent_children_in_poverty': percent_children_in_poverty,
+                }
 
-        poverty.append(data_point)
+            poverty.append(data_point)
 
     poverty_dataframe = pd.DataFrame.from_dict(poverty)
-    #print(hospitalizations_dataframe.head (10))
+    print(poverty_dataframe.head (10))
 
     return poverty_dataframe.T.to_dict().values()
 

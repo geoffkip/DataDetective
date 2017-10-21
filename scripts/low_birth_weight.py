@@ -13,13 +13,13 @@ Transformations:
 
 """
 
-DATA_FILE_PATH = '/Users/edna/DataDetective/data/low_birth_weight.json'
+DATA_FILE_PATH = 'data/low_birth_weight.json'
 
 def extract():
     """
     Extracts data from a URL. Returns the data extracted as a pandas DataFrame.
     """
-    f = open('/Users/edna/DataDetective/data/eddi/low_birth_weight.csv', 'r')
+    f = open('data/eddi/low_birth_weight.csv', 'r')
     reader = csv.DictReader(f,delimiter='\t')
     extracted_data = [row for row in reader]
 

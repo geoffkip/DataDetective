@@ -46,6 +46,7 @@ def measure_data(measure):
     month = request.form['month']
 
     data = database.get_measure_data(measure, year, month)
+    print("DATA:", data)
 
     return jsonify(data),200
 

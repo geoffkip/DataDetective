@@ -59,11 +59,12 @@ def get_measure_data(measure, year, month):
       "name": 'Measure Name'
     }
     """
-    
+
     data = query("SELECT county, %s FROM data_points where year= %s and month= %s and %s is not null"
                  % (measure, year, month, measure))
-    
+
+    print("DATA: ", data)
+
     chart_data = map(format_chart_data,data)
 
     return {"data" : chart_data, "name" : measure}
-
