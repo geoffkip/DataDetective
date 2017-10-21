@@ -2,6 +2,7 @@ import sys, os, os.path, binascii
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)),"lib"))
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask import jsonify
+from collections import Counter
 import config
 import recommender
 import pandas as pd
@@ -63,13 +64,14 @@ def recommend():
     Returns a list of measure similar to the list of measures.
     """
     selected_measures =  request.form["measures"].split(',')
-    print(selected_measures)
+    #print(selected_measures)
     tags, categories = recommender.get_tags_categories(selected_measures)
-    print(tags, categories)
+    #print(tags, categories)
     recommended_measures = recommender.get_measures(tags, categories)
-    print("measures:", recommended_measures)
-    # TODO: remove selected_measures from recommended_measures
-    return jsonify(recommended_measures),200
+    #print("measures:", recommended_measures)
+    unduplicatedMeasures=list(set(recommended_measures))
+    #print unduplicatedMeasures
+    return jsonify(unduplicatedMeasures),200
 
 
 @app.route('/counties/list')
