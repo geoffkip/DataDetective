@@ -11,10 +11,12 @@ import pandas as pd
 import datetime as dt
 from sqlalchemy import create_engine
 import psycopg2
+import os
 
 
 
-con = psycopg2.connect( host= hostname, user= username, password= password, database=database)
+con = psycopg2.connect( host= os.environ['DB_HOST'], user= os.environ['DB_USER'], 
+                       password= os.environ['DB_PASSWORD'], database=os.environ['DB_NAME'])
 cur = con.cursor()  
 
 DATASET_FILES = [
