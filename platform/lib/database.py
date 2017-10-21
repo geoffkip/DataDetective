@@ -12,7 +12,6 @@ from sqlalchemy import create_engine
 import psycopg2
 import os
 
-
 def cursor():
     """
     Returns a connection/cursor to the database
@@ -37,12 +36,34 @@ def query(sql):
     return results
 
 
+def format_chart_data(datum):
+    print(datum)
+    # Convert to a list
+    chart_data= list(datum)
+    # Convert the [1] into a float
+    chart_data[1]= float(chart_data[1])
+    return chart_data
+
+
 def get_measure_data(measure, year, month):
     """
     Returns the data for a given measure
-    """
-    # TODO:
-    data = query("SELECT %s FROM data_points where year= %s and month= %s and measure is not null" 
-                 % (measure, year, month))
 
-    return data
+    {
+      "data": [
+        ['County 1', 100],
+        ['County 2', 100],
+        ...
+        ['County n', 100]
+      ],
+      "name": 'Measure Name'
+    }
+    """
+    
+    data = query("SELECT county, %s FROM data_points where year= %s and month= %s and %s is not null"
+                 % (measure, year, month, measure))
+    
+    chart_data = map(format_chart_data,data)
+
+    return {"data" : chart_data, "name" : measure}
+

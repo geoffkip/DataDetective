@@ -5,6 +5,7 @@ from flask import jsonify
 from collections import Counter
 import config
 import recommender
+import database
 import pandas as pd
 
 app = Flask(__name__)
@@ -44,10 +45,9 @@ def measure_data(measure):
     year =  request.form['year']
     month = request.form['month']
 
-    # TODO: Fetch the data for this measure from the database.
-    # data = get_measure_data(measure, year, month)
+    data = database.get_measure_data(measure, year, month)
 
-    return jsonify(config.generate_series(measure)),200
+    return jsonify(data),200
 
 @app.route('/measures/<measure>/timeseries', methods=['POST'])
 def measure_data_timeseries(measure):
