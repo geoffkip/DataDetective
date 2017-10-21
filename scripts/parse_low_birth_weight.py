@@ -65,6 +65,7 @@ def load(records):
     """
     document = {
         'id': 'aps5-fttf',
+        'measures': ['low_weight_births','total_births'],
         'name': 'Enterprise Data Dissemination Informatics Exchange Department of Health: Hospitalizations by County 2001-2014',
         'categories': ['social services,finance,health'],
         'tags': ['statistics', 'health', 'informatics', 'exchange', 'child', 'cancer', 'birth', 'air', 'disease', 'hospital', 'housing', 'pregnancies'],
