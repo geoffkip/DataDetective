@@ -23,7 +23,9 @@ DATASET_FILES = [
     "data/medicaid.json",
     "data/prisons.json",
     "data/snap.json",
-    "data/unemployment.json"
+    "data/unemployment.json",
+    "data/low_birth_weight.json",
+    "data/poverty.json"    
 ]
 
 def parse_json(data):
