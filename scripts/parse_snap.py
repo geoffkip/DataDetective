@@ -71,7 +71,7 @@ def load(records):
         'id': 'kd9x-cq7y',
         'name': 'Supplemental Nutrition Assistance Program Individuals And Dollars 2004 - Current Human ServicesHuman Services Medical Assistance Enrollment July 2003 - Current Human Services',
         'categories': ['Human Services'],
-        'tags': ['nutrition,snap,human,service,federal,individual,dollar,assistance,food,stamps'],
+        'tags': ['nutrition','snap','human','service','federal','individual','dollar','assistance','food','stamps'],
         'measures': ['snap_dollars','snap_individuals'],
         'data': records
     }
