@@ -66,6 +66,16 @@ $(document).ready(function() {
   $('#months-select').select2();
   $('#years-select').select2();
   $('#measures-select').select2();
+
+  console.log("Getting measures")
+  getMeasures(function(measures){
+    console.log(measures)
+    for(var i = 0; i < measures.length; i++) {
+      let option = new Option(titleCaseMeasure(measures[i]), measures[i]);
+      $("#measures-select").append(option);
+    }
+  })
+
   $("#measures-select")
     .on('change', function (e) {
       var measures = $('#measures-select').select2('data');
@@ -79,12 +89,47 @@ $(document).ready(function() {
       getRecommendations(measures, function(recommendations){
         $("#recommendations").empty();
         for(var i = 0; i < recommendations.length; i++) {
-          $("#recommendations").append('<span class="badge badge-primary">'+recommendations[i]+'</span>&nbsp;')
+          $("#recommendations").append('<span onClick="updateMeasures(this.id)" id="' +
+                                       recommendations[i] +
+                                       '"class="badge badge-primary">' +
+                                       titleCaseMeasure(recommendations[i]) +
+                                       '</span>&nbsp;')
         }
       })
 
     })
 });
+
+var getMeasures = function(callback) {
+  console.log("Getting measures")
+  $.ajax({
+      url: '/measures/list',
+      type: 'GET',
+      success: function(response) {
+          return callback(response)
+      },
+      error: function(error) {
+          console.log(error);
+      }
+  });
+}
+
+var updateMeasures = function(measure) {
+  var selectedValues = $("#measures-select").val()
+  selectedValues.push(measure)
+  $("#measures-select").val(selectedValues).trigger("change")
+}
+
+var titleCaseMeasure = function(str) {
+  str = str.toLowerCase().split('_');
+
+  for(var i = 0; i < str.length; i++){
+    str[i] = str[i].split('');
+    str[i][0] = str[i][0].toUpperCase();
+    str[i] = str[i].join('');
+  }
+  return str.join(' ');
+}
 
 var getSeries = function(measure, year, month, callback) {
   console.log("In getSeries", measure, year, month)
@@ -125,19 +170,24 @@ var getTimeSeries = function(measure, year, month, callback) {
 
 var getRecommendations = function(measures, callback) {
   console.log("In getSeries", measures)
-  $.ajax({
-      url: '/measures/recommend',
-      data: {
-        measures: JSON.stringify(measures.join(','))
-      },
-      type: 'POST',
-      success: function(response) {
-          return callback(response)
-      },
-      error: function(error) {
-          console.log(error);
-      }
-  });
+  if(measures.length > 0) {
+    $.ajax({
+        url: '/measures/recommend',
+        data: {
+          measures: JSON.stringify(measures.join(','))
+        },
+        type: 'POST',
+        success: function(response) {
+            return callback(response)
+        },
+        error: function(error) {
+            console.log(error);
+            callback([])
+        }
+    });
+  } else {
+    callback([])
+  }
 }
 
 var newBarChart = function(id, title, series) {

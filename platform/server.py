@@ -63,15 +63,11 @@ def recommend():
     """
     Returns a list of measure similar to the list of measures.
     """
-    selected_measures =  request.form["measures"].split(',')
-    #print(selected_measures)
+    selected_measures =  request.form["measures"].replace('"','').split(',')
     tags, categories = recommender.get_tags_categories(selected_measures)
-    #print(tags, categories)
     recommended_measures = recommender.get_measures(tags, categories)
-    #print("measures:", recommended_measures)
-    unduplicatedMeasures=list(set(recommended_measures))
-    return jsonify(unduplicatedMeasures),200
-
+    unduplicated_measures=list(set(recommended_measures) - set(selected_measures))
+    return jsonify(unduplicated_measures),200
 
 @app.route('/counties/list')
 def counties():
