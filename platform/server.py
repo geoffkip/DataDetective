@@ -50,6 +50,20 @@ def measure_data(measure):
 
     return jsonify(data),200
 
+@app.route('/measures/<measure>/geo', methods=['POST'])
+def measure_data_geodata(measure):
+    """
+    Returns the data for a given measure for map HighChart
+    """
+
+    year =  request.form['year']
+    month = request.form['month']
+
+    data = database.get_measure_data(measure, year, month,chart='geo')
+    print("DATA:", data)
+
+    return jsonify(data),200
+
 @app.route('/measures/<measure>/timeseries', methods=['POST'])
 def measure_data_timeseries(measure):
     """

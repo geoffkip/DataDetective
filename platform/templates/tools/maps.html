@@ -21,8 +21,9 @@ var drawCharts = function(measures, year, month) {
     let id = "chart"+ (i+1)
     let measure = measures[i].id
     let title = measures[i].text
-    getSeries(measure, year, month, function(series){
-      let chart = newGeoChart(id, title)
+    getGeoSeries(measure, year, month, function(series){
+      console.log(series)
+      let chart = newGeoChart(id, title,series)
       charts[measure] = chart
     });
   }
