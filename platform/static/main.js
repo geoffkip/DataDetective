@@ -88,6 +88,24 @@ var getSeries = function(measure, year, month, callback) {
   });
 }
 
+var getGeoSeries = function(measure, year, month, callback) {
+  console.log("In getSeries", measure, year, month)
+  $.ajax({
+      url: '/measures/'+measure+'/geo',
+      data: {
+        year: year,
+        month: month
+      },
+      type: 'POST',
+      success: function(response) {
+          return callback(response)
+      },
+      error: function(error) {
+          console.log(error);
+      }
+  });
+}
+
 var getTimeSeries = function(measure, year, month, callback) {
   console.log("In getSeries", measure, year, month)
   $.ajax({
