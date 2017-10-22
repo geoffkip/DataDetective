@@ -105,7 +105,6 @@ def query(sql):
 
     return results
 
-<<<<<<< HEAD
 def format_geo_chart_data(datum):
     print(datum)
     # Convert to a list
@@ -117,7 +116,6 @@ def format_geo_chart_data(datum):
     return chart_data
 
 
-=======
 def get_measures(year):
     """
     Returns a list of measures that are available for a given year
@@ -125,7 +123,7 @@ def get_measures(year):
     # TODO: Select measures from database where year = year
 
     return measures
->>>>>>> origin/master
+
 
 def format_chart_data(datum):
     chart_data= list(datum)
