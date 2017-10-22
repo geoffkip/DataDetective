@@ -115,7 +115,6 @@ def format_geo_chart_data(datum):
 
     return chart_data
 
-
 def get_measures(year):
     """
     Returns a list of measures that are available for a given year
@@ -130,10 +129,11 @@ def format_chart_data(datum):
     chart_data[1]= float(chart_data[1])
     return chart_data
 
+
 # TODO: Build get_measure_data(measure, year, format='timeseries')
 # TODO: Build get_measure_data(measure, year, format='geo')
 # TODO: Build get_measure_data(measure, year, format='column')
-def get_measure_data(measure, year, month):
+def get_measure_data(measure, year, month, chart="column"):
     """
     Returns the data for a given measure
 
@@ -170,7 +170,11 @@ def get_measure_data(measure, year, month):
     """
     _query = "SELECT county, %s FROM data_points where year= %s and %s is not null" % (measure, year, measure)
     data = query(_query)
-
-    chart_data = map(format_chart_data,data)
+    
+    if chart == "column":
+        chart_data = map(format_chart_data,data)
+        
+    if chart == "geo":
+        chart_data= map(format_geo_chart_data,data)
 
     return {"data" : chart_data, "name" : measure}
