@@ -11,6 +11,8 @@ Requires environmental variables be set:
 from sqlalchemy import create_engine
 import psycopg2
 import os
+import datetime
+import time
 
 def cursor():
     """
@@ -48,10 +50,20 @@ def format_chart_data(datum):
     chart_data[1]= float(chart_data[1])
     return chart_data
 
+def format_timeseries_chart_data(datum):
+    try:
+        chart_data = []
+        chart_data.append(time.mktime(datetime.datetime(datum[0],datum[1],1).utctimetuple())*1000)
+        chart_data.append(float(datum[2]))
+    except ValueError as e:
+        print(datum)
+        print(e)
+    return chart_data
+
 # TODO: Build get_measure_data(measure, year, format='timeseries')
 # TODO: Build get_measure_data(measure, year, format='geo')
 # TODO: Build get_measure_data(measure, year, format='column')
-def get_measure_data(measure, year, month):
+def get_measure_data(measure, year, month, chart='column'):
     """
     Returns the data for a given measure
 
@@ -86,9 +98,25 @@ def get_measure_data(measure, year, month):
           "name": 'Measure Name'
         }
     """
-    _query = "SELECT county, %s FROM data_points where year= %s and %s is not null" % (measure, year, measure)
+    if chart == 'timeseries':
+        _query = """
+                SELECT year, month, SUM({0})
+                FROM data_points
+                WHERE {0} is not null AND county != 'N/A'
+                GROUP BY year, month
+                ORDER BY year, month
+                """.format(measure, year)
+    else:
+        _query = "SELECT county, %s FROM data_points where year= %s and %s is not null" % (measure, year, measure)
+
     data = query(_query)
 
-    chart_data = map(format_chart_data,data)
+    if chart == 'timeseries':
+        chart_data = map(format_timeseries_chart_data,data)
+        result = {"data" : chart_data, "name" : measure}
+    else:
+        chart_data = map(format_chart_data,data)
+        result = {"data" : chart_data, "name" : measure}
 
-    return {"data" : chart_data, "name" : measure}
+
+    return result

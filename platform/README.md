@@ -1,5 +1,9 @@
 # DataDetective: Platform
 
+## TODO:
+- [ ] Reload final data set
+- [ ] Filter out "All States", "Pennyslvania", "Statewide" from returned results in `database.py`
+
 ## Setting up Google cloud virtual machine(VM)
 A virtual machine was set up using Google's compute engine. An instance with elasticsearch pre-installed was used from Bitnami --> https://console.cloud.google.com/launcher/details/bitnami-launchpad/elasticsearch?project=boreal-quarter-181516. It was provisioned with 2 GB ram.
 

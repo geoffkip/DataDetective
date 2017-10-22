@@ -144,9 +144,7 @@ var newBarChart = function(id, title, series) {
       },
       yAxis: {
           min: 0,
-          title: {
-              text: 'Rainfall (mm)'
-          }
+          title: null
       },
       tooltip: {
           headerFormat: '<span style="font-size:10px">{point.key}</span><table>',

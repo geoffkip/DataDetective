@@ -55,8 +55,13 @@ def measure_data_timeseries(measure):
     """
     Returns the data for a given measure for timeseries HighChart
     """
+    year =  request.form['year']
+    month = request.form['month']
 
-    return jsonify(config.generate_timeseries(measure)),200
+    data = database.get_measure_data(measure, year, month, chart='timeseries')
+    print("DATA:", data)
+
+    return jsonify(data),200
 
 
 @app.route('/measures/recommend', methods=['POST'])

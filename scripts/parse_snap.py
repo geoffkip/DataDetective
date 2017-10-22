@@ -24,11 +24,11 @@ def extract():
     """
     Extracts data from a URL. Returns the data extracted as a pandas DataFrame.
     """
-    URL = 'http://data.pa.gov/resource/vjq8-nahv.json'
+    URL = 'http://data.pa.gov/api/views/kd9x-cq7y/rows.json'
     response = urllib2.urlopen(URL)
     extracted_data  = json.load(response)
 
-    return extracted_data
+    return extracted_data["data"]
 
 def transform(data):
     """
@@ -45,12 +45,10 @@ def transform(data):
     data_points = []
     for datum in data:
 
-        county                      = datum["county_name"]
-        date                        = datum["date"][0:10]
-
-        print(datum["snap_dollars"])
-        snap_dollars = float(datum["snap_dollars"])
-        snap_individuals = int(datum["snap_individuals"])
+        county       = datum[16]
+        date         = datum[13][0:10]
+        snap_dollars = float(datum[18])
+        snap_individuals = int(datum[17])
 
 
         data_point = {
