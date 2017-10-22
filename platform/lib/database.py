@@ -168,12 +168,12 @@ def get_measure_data(measure, year, month, chart="column"):
           "name": 'Measure Name'
         }
     """
-    _query = "SELECT county, %s FROM data_points where year= %s and %s is not null" % (measure, year, measure)
+    _query = "SELECT county, %s FROM data_points where year= %s and %s is not null and county not in ('Pennsylvania','Statewide','N/A','Statewide Project')" % (measure, year, measure)
     data = query(_query)
-    
+
     if chart == "column":
         chart_data = map(format_chart_data,data)
-        
+
     if chart == "geo":
         chart_data= map(format_geo_chart_data,data)
 
