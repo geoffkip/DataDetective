@@ -28,11 +28,11 @@ def extract():
     """
     Extracts data from a URL. Returns the data extracted as a pandas DataFrame.
     """
-    URL = 'http://data.pa.gov/resource/4c6y-b2hg.json'
+    URL = 'http://data.pa.gov/api/views/2ght-hfn9/rows.json'
     response = urllib2.urlopen(URL)
     extracted_data  = json.load(response)
 
-    return extracted_data
+    return extracted_data["data"]
 
 def transform(data):
     """
@@ -49,10 +49,10 @@ def transform(data):
     data_points = []
     for datum in data:
 
-        county                      = datum["county_name"]
-        date                        = datum["date"][0:10]
-        ma_children = int(datum["ma_children"])
-        ma_individuals = int(datum["ma_individuals"])
+        county                      = datum[16]
+        date                        = datum[13][0:10]
+        ma_children = int(datum[17])
+        ma_individuals = int(datum[18])
 
         data_point = {
             'county': county,
@@ -71,7 +71,7 @@ def load(records):
     document = {
         'id': '2ght-hfn9',
         'name': 'Medical Assistance Enrollment July 2003 - Current Human Services',
-        'categories': ['social services,finance,health'],
+        'categories': ['social services','finance','health'],
         'tags': ['assistance','medical','insurance','medicaid','ma','dhs','enroll','health'],
         'measures': ['ma_children','ma_individuals'],
         'data': records

@@ -1,66 +1,5 @@
 var charts = {}; // A list of charts on the page
 
-var counties = [
-  "Adams",
-  "Armstrong",
-  "Beaver",
-  "Bedford",
-  "Statewide",
-  "Alleghany",
-  "Northampton",
-  "Luzerne",
-  "Lancaster",
-  "Philadelphia",
-  "Washington",
-  "Bradford",
-  "Dauphin",
-  "Snyder",
-  "Deleware",
-  "Bucks",
-  "Montgomery",
-  "Lackawanna",
-  "Schuylkill",
-  "Mifflin",
-  "Franklin",
-  "Union",
-  "York",
-  "Lycoming",
-  "Centre",
-  "Blair",
-  "Fayette",
-  "Mercer",
-  "Pike",
-  "Chester",
-  "Monroe",
-  "Carbon",
-  "Indiana",
-  "Huntingdon",
-  "Greene",
-  "Forest",
-  "Wayne",
-  "Clearfield",
-  "Somerset",
-  "Crawford",
-  "Norhumberland",
-  "Berks",
-  "Tioga",
-  "Columbia",
-  "Butler",
-  "Susquehanna",
-  "Cameron",
-  "Warren",
-  "Venango",
-  "Lebanon",
-  "Lawrence",
-  "Cambria",
-  "Montour",
-  "Juniata",
-  "Jefferson",
-  "Clinton",
-  "McKean",
-  "Potter"
-]
-
 $(document).ready(function() {
   // SETUP SELECTIONS
   $('#months-select').select2();
@@ -201,8 +140,7 @@ var newBarChart = function(id, title, series) {
           text: title
       },
       xAxis: {
-          categories: counties,
-          crosshair: true
+        type: "category"
       },
       yAxis: {
           min: 0,

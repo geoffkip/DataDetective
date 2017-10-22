@@ -105,6 +105,7 @@ def query(sql):
 
     return results
 
+<<<<<<< HEAD
 def format_geo_chart_data(datum):
     print(datum)
     # Convert to a list
@@ -116,35 +117,61 @@ def format_geo_chart_data(datum):
     return chart_data
 
 
+=======
+def get_measures(year):
+    """
+    Returns a list of measures that are available for a given year
+    """
+    # TODO: Select measures from database where year = year
+
+    return measures
+>>>>>>> origin/master
 
 def format_chart_data(datum):
-    print(datum)
-    # Convert to a list
     chart_data= list(datum)
-    # Convert the [1] into a float
     chart_data[1]= float(chart_data[1])
     return chart_data
 
-
+# TODO: Build get_measure_data(measure, year, format='timeseries')
+# TODO: Build get_measure_data(measure, year, format='geo')
+# TODO: Build get_measure_data(measure, year, format='column')
 def get_measure_data(measure, year, month):
     """
     Returns the data for a given measure
 
-    {
-      "data": [
-        ['County 1', 100],
-        ['County 2', 100],
-        ...
-        ['County n', 100]
-      ],
-      "name": 'Measure Name'
-    }
+    format = 'column': (county names)
+        {
+          "data": [
+            ['County 1', 100],
+            ['County 2', 100],
+            ...
+            ['County n', 100]
+          ],
+          "name": 'Measure Name'
+        }
+    format = 'geo': fips coded
+        {
+          "data": [
+            ['us-pa-015', 100],
+            ['us-pa-133', 100],
+            ...
+            ['us-pa-n', 100]
+          ],
+          "name": 'Measure Name'
+        }
+    format = 'timeseries': UTC timstamps
+        {
+          "data": [
+            [14000000000, 100],
+            [14000100000, 100],
+            ...
+            [n, 100]
+          ],
+          "name": 'Measure Name'
+        }
     """
-
-    data = query("SELECT county, %s FROM data_points where year= %s and month= %s and %s is not null"
-                 % (measure, year, month, measure))
-
-    print("DATA: ", data)
+    _query = "SELECT county, %s FROM data_points where year= %s and %s is not null" % (measure, year, measure)
+    data = query(_query)
 
     chart_data = map(format_chart_data,data)
 
