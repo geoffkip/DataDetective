@@ -45,3 +45,6 @@ DataDetective is built using ElasticSearch and Python Flask. We ingest the data 
 * ElasticSearch
 * Python
 * Flask
+* Postgresql Database
+* Docker ?
+* HighCharts (Javascript)
