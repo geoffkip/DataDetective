@@ -1,7 +1,0 @@
-HTTP/1.0 301 MOVED PERMANENTLY
-Content-Type: text/html; charset=utf-8
-Content-Length: 289
-Location: http://localhost:5000/users/applications/
-Server: Werkzeug/0.12.2 Python/2.7.10
-Date: Mon, 23 Oct 2017 17:02:59 GMT
-
