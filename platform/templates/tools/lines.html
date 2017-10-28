@@ -10,12 +10,25 @@
 var drawCharts = function(measures, year, month) {
   var seriesCount = measures.length;
   seriesList = []
+  yaxis = []
 
-  async.each(measures,  function(measure, callback) {
+  async.forEachOf(measures,  function(measure, index, callback) {
     let slug = measure.id
     let title = measure.text
     getTimeSeries(slug, year, month, function(series){
+      series.yAxis = index
       seriesList.push(series)
+      yaxis.push({
+        title: {
+            text: series.name
+        },
+        labels: {
+            style: {
+                color: Highcharts.getOptions().colors[index]
+            }
+        },
+        opposite: Boolean(index%2)
+      })
       callback();
     });
   }, function(err) {
@@ -24,7 +37,7 @@ var drawCharts = function(measures, year, month) {
 
 }
 var lineChart = function(id, title, series) {
-  console.log("Make lines: ", id, title, series)
+  console.log("Make lines: ", id, title, series, yaxis)
 
   var barChart = Highcharts.chart(id, {
       chart: {
@@ -37,14 +50,11 @@ var lineChart = function(id, title, series) {
           type: 'datetime',
           crosshair: true
       },
-      yAxis: {
-          min: 0,
-          title: null
-      },
+      yAxis: yaxis,
       tooltip: {
           headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
           pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-              '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+              '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
           footerFormat: '</table>',
           shared: true,
           useHTML: true

@@ -27,15 +27,14 @@ except NotFoundError as e:
     pass
 
 DATASET_FILES = [
-    "data/corrections.json",
     "data/hospitalization.json",
     "data/jobs.json",
     "data/medicaid.json",
-    "data/park_n_ride.json",
-    "data/poverty.json",
     "data/prisons.json",
     "data/snap.json",
-    "data/unemploment.json"
+    "data/unemployment.json",
+    "data/low_birth_weight.json",
+    "data/poverty.json"
 ]
 
 def load_dataset_file(dataset_file):

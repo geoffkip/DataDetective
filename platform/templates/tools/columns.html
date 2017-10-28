@@ -10,20 +10,28 @@
 var drawCharts = function(measures, year, month) {
   var seriesCount = measures.length;
   seriesList = []
+  yaxis = []
 
-  async.each(measures,  function(measure, callback) {
+  async.forEachOf(measures,  function(measure, index, callback) {
     let slug = measure.id
     let title = measure.text
     getSeries(slug, year, month, function(series){
+      series.yAxis = index
       seriesList.push(series)
+      yaxis.push({
+        title: {
+            text: series.name
+        },
+        opposite: Boolean(index%2)
+      })
       callback();
     });
   }, function(err) {
-    let chart = columnChart("column-chart", null, seriesList)
+    let chart = columnChart("column-chart", null, seriesList, yaxis)
   })
 
 }
-var columnChart = function(id, title, series) {
+var columnChart = function(id, title, series, yaxis) {
   console.log("Make columns: ", id, title, series)
 
   var barChart = Highcharts.chart(id, {
@@ -36,10 +44,7 @@ var columnChart = function(id, title, series) {
       xAxis: {
         type: "category"
       },
-      yAxis: {
-          min: 0,
-          title: null
-      },
+      yAxis: yaxis,
       tooltip: {
           headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
           pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +

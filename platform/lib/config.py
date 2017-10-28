@@ -1,7 +1,7 @@
 import random
 import datetime,time
 
-COUNTIES = [
+COUNTIES_FIPS = [
 "Adams",
 "Armstrong",
 "Beaver",
