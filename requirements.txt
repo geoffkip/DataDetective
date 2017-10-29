@@ -6,3 +6,4 @@ requests
 elasticsearch
 elasticsearch_dsl
 psycopg2
+sqlalchemy
