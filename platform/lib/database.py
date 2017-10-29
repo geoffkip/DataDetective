@@ -141,9 +141,6 @@ def format_timeseries_chart_data(datum):
         print(e)
     return chart_data
 
-# TODO: Build get_measure_data(measure, year, format='timeseries')
-# TODO: Build get_measure_data(measure, year, format='geo')
-# TODO: Build get_measure_data(measure, year, format='column')
 def get_measure_data(measure, year, month, chart='column'):
     """
     Returns the data for a given measure

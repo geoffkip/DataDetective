@@ -17,28 +17,38 @@ $(document).ready(function() {
 
   $("#measures-select")
     .on('change', function (e) {
-      var measures = $('#measures-select').select2('data');
-      var year = $('#years-select').select2('data')[0].id;
-      var month = $('#months-select').select2('data')[0].id;
-
-      drawCharts(measures, year, month)
-
-      // Step 2: Update the recommendations
-      measures = measures.map(function(m){return m.id})
-      getRecommendations(measures, function(recommendations){
-        $("#recommendations").empty();
-        for(var i = 0; i < recommendations.length; i++) {
-          $("#recommendations").append('<span onClick="updateMeasures(this.id)" id="' +
-                                       recommendations[i] +
-                                       '"class="badge badge-primary">' +
-                                       titleCaseMeasure(recommendations[i]) +
-                                       '</span>&nbsp;')
-        }
-      })
-
+      update();
+    })
+  $("#years-select")
+    .on('change', function (e) {
+      update();
+    })
+  $("#months-select")
+    .on('change', function (e) {
+      update();
     })
 });
+var update = function() {
 
+  var measures = $('#measures-select').select2('data');
+  var year = $('#years-select').select2('data')[0].id;
+  var month = $('#months-select').select2('data')[0].id;
+
+  drawCharts(measures, year, month)
+
+  measures = measures.map(function(m){return m.id})
+  getRecommendations(measures, function(recommendations){
+    $("#recommendations").empty();
+    for(var i = 0; i < recommendations.length; i++) {
+      $("#recommendations").append('<span onClick="updateMeasures(this.id)" id="' +
+                                   recommendations[i] +
+                                   '"class="badge badge-primary">' +
+                                   titleCaseMeasure(recommendations[i]) +
+                                   '</span>&nbsp;')
+    }
+  })
+
+}
 var getMeasures = function(callback) {
   console.log("Getting measures")
   $.ajax({
@@ -168,7 +178,7 @@ var newBarChart = function(id, title, series) {
       tooltip: {
           headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
           pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-              '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+              '<td style="padding:0"><b>{point.y}</b></td></tr>',
           footerFormat: '</table>',
           shared: true,
           useHTML: true
