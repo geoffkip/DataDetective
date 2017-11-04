@@ -1,0 +1,15 @@
+[Unit]
+Description=Data Detective daemon
+After=network.target postgresql.service mysql.service redis.service rabbitmq-server.service
+Wants=postgresql.service mysql.service redis.service rabbitmq-server.service
+[Service]
+EnvironmentFile=/etc/sysconfig/data-detective
+WorkingDirectory=/opt/DataDetective/platform
+User=root
+Group=root
+Type=simple
+ExecStart=/usr/bin/python server.py
+Restart=always
+RestartSec=5s
+[Install]
+WantedBy=multi-user.target

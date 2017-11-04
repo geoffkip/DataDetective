@@ -1,13 +1,14 @@
 # DataDetective: Platform
 
-## TODO:
-- [ ] Reload final data set
-- [ ] Filter out "All States", "Pennyslvania", "Statewide", etc. from returned results in `database.py`
-- [ ] Create two axises on timeseries and column chart
-- [ ] Switch to Esri maps
-- [ ] For column and geo chart, only show measures based on selected year, month
-- [ ] Create a home page
-- [ ] Add county selector to column chart
+Deployed with systemd on Ubuntu on GCP. You can manage the service with:
+```
+sudo service data-detective [start | stop | restart]
+```
+Get the log files for the service with:
+
+```
+sudo journalctl -u data-detective -e
+```
 
 ## Setting up Google cloud virtual machine(VM)
 A virtual machine was set up using Google's compute engine. An instance with elasticsearch pre-installed was used from Bitnami --> https://console.cloud.google.com/launcher/details/bitnami-launchpad/elasticsearch?project=boreal-quarter-181516. It was provisioned with 2 GB ram.
