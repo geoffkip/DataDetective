@@ -1,5 +1,6 @@
 # Team Titans: DataDetective :mag:
 This project is part of the [Code4PA Hackathon](https://www.code4pa.tech/).
+Access the app here http://35.192.134.58:5000/.
 
 ## Project Overview
 DataDetective aims to integrate all the economic, education, and health related data sets available on data.pa.gov. Our project is focused on visualizing multiple data sets at the same time to provide users with a way to explore the data.
