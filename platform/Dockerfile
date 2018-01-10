@@ -1,4 +1,4 @@
-# Python base image
+# Python base image 3.6
 FROM python:3.6
 
 # Updating repository sources
