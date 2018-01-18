@@ -1,4 +1,5 @@
 version: "2"
+
 services:
   db:
     restart: always
@@ -24,11 +25,11 @@ services:
       - "9200:9200"
   web:
     image: gkip/datadetective
-     depends_on:
+    depends_on:
       - db
       - es
     command: python app.py
     ports:
       - "5000:5000"
     volumes:
-- .:/code
+      - .:/code
