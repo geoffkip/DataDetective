@@ -1,0 +1,34 @@
+version: "2"
+services:
+  db:
+    restart: always
+    image: postgres
+    container_name: detective_db
+    volumes:
+      - type: volume
+        source: dbdata
+        target: /pg_data
+    ports:
+      - "8001:5432"
+  es:
+    labels:
+      com.example.service: "es"
+      com.example.description: "For searching and indexing data"
+    image: elasticsearch
+    container_name: detective_es
+    volumes:
+      - type: volume
+        source: esdata
+        target: /usr/share/elasticsearch/data/
+    ports:
+      - "9200:9200"
+  web:
+    image: gkip/datadetective
+     depends_on:
+      - db
+      - es
+    command: python app.py
+    ports:
+      - "5000:5000"
+    volumes:
+- .:/code
